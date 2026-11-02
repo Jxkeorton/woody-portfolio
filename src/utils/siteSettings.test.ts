@@ -15,7 +15,12 @@ describe('Site settings query', () => {
 			'statement',
 			'roleLine',
 			'availabilityLine',
+			'details',
+			'label',
+			'value',
+			'skills',
 			'about',
+			'profileImage',
 			'email',
 			'contactHeading',
 			'siteTitle',
@@ -24,6 +29,12 @@ describe('Site settings query', () => {
 			expect(SITE_SETTINGS_QUERY).toContain(field);
 		}
 		expect(SITE_SETTINGS_QUERY).not.toContain('...');
+	});
+
+	it('fetches the profile image with its alt text, focal point, crop, preview and size', () => {
+		for (const field of ['alt', 'hotspot', 'crop', 'lqip', 'dimensions']) {
+			expect(SITE_SETTINGS_QUERY).toContain(field);
+		}
 	});
 });
 
@@ -35,6 +46,36 @@ describe('Site settings with defaults', () => {
 
 		it('has no email, so no made-up address is shown', () => {
 			expect(resolveSiteSettings(null).email).toBeUndefined();
+		});
+	});
+
+	describe('given no settings document', () => {
+		it('names the site after Woody Orton', () => {
+			expect(resolveSiteSettings(null).name).toBe('Woody Orton');
+		});
+
+		it('has no title block details and no skills', () => {
+			expect(resolveSiteSettings(null).details).toEqual([]);
+			expect(resolveSiteSettings(null).skills).toEqual([]);
+		});
+	});
+
+	describe('given details and skills with blank entries', () => {
+		const settings = resolveSiteSettings({
+			details: [
+				{ _key: 'a', label: 'Degree', value: 'BEng' },
+				{ _key: 'b', label: 'Based', value: '  ' },
+				{ _key: 'c', label: '', value: 'Orphan' },
+			],
+			skills: ['CATIA', '', '  ', 'Python'],
+		});
+
+		it('drops details that are missing a label or a value', () => {
+			expect(settings.details.map((d) => d.label)).toEqual(['Degree']);
+		});
+
+		it('drops blank skills and keeps the order of the rest', () => {
+			expect(settings.skills).toEqual(['CATIA', 'Python']);
 		});
 	});
 
@@ -55,11 +96,17 @@ describe('Site settings with defaults', () => {
 			expect(settings.siteDescription).toBe(DEFAULT_SITE_SETTINGS.siteDescription);
 		});
 
+		it('has no details or skills', () => {
+			expect(settings.details).toEqual([]);
+			expect(settings.skills).toEqual([]);
+		});
+
 		it('leaves the optional fields out', () => {
 			expect(settings.roleLine).toBeUndefined();
 			expect(settings.availabilityLine).toBeUndefined();
 			expect(settings.about).toBeUndefined();
 			expect(settings.email).toBeUndefined();
+			expect(settings.profileImage).toBeUndefined();
 		});
 	});
 
@@ -68,6 +115,7 @@ describe('Site settings with defaults', () => {
 			const settings = resolveSiteSettings(minimal);
 			expect(settings.name).toBe(minimal.name);
 			expect(settings.about).toBeUndefined();
+			expect(settings.profileImage).toBeUndefined();
 		});
 	});
 });

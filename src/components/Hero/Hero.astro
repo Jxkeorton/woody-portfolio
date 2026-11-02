@@ -1,11 +1,12 @@
 ---
+import TitleBlock from '../TitleBlock/TitleBlock.astro';
 import type { SiteSettings } from '../../utils/siteSettings.types';
 
 interface Props {
-	settings: Pick<SiteSettings, 'name' | 'statement' | 'roleLine' | 'availabilityLine'>;
+	settings: Pick<SiteSettings, 'name' | 'statement' | 'details' | 'roleLine' | 'availabilityLine'>;
 }
 
-const { name, statement, roleLine, availabilityLine } = Astro.props.settings;
+const { name, statement, details, roleLine, availabilityLine } = Astro.props.settings;
 
 const startLinks = [
 	{ href: '#work', label: 'See my projects' },
@@ -17,6 +18,7 @@ const labelLines = [roleLine, availabilityLine].filter(Boolean);
 
 <section class="hero">
 	<h1>{name}</h1>
+	<TitleBlock {details} />
 	<div class="hero-grid">
 		<div class="statement">
 			<p>{statement}</p>

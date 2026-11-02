@@ -1,4 +1,4 @@
-import { defineField, defineType } from 'sanity';
+import { defineArrayMember, defineField, defineType } from 'sanity';
 
 export const siteSettings = defineType({
 	name: 'siteSettings',
@@ -29,6 +29,38 @@ export const siteSettings = defineType({
 			validation: (rule) => rule.required().max(200),
 		}),
 		defineField({
+			name: 'details',
+			title: 'Title block details',
+			description:
+				'Short facts shown under your name like the title block on an engineering drawing, for example Degree: BEng Automotive. Up to six. Drag to reorder.',
+			type: 'array',
+			group: 'hero',
+			of: [
+				defineArrayMember({
+					type: 'object',
+					name: 'detail',
+					fields: [
+						defineField({
+							name: 'label',
+							title: 'Label',
+							description: 'For example Degree, Year, Based or Available.',
+							type: 'string',
+							validation: (rule) => rule.required().max(20),
+						}),
+						defineField({
+							name: 'value',
+							title: 'Value',
+							description: 'For example BEng Automotive, 3, Coventry or Jul 2027.',
+							type: 'string',
+							validation: (rule) => rule.required().max(40),
+						}),
+					],
+					preview: { select: { title: 'label', subtitle: 'value' } },
+				}),
+			],
+			validation: (rule) => rule.max(6),
+		}),
+		defineField({
 			name: 'roleLine',
 			title: 'Role',
 			description: 'For example Automotive engineering student. Leave empty to hide it.',
@@ -45,6 +77,16 @@ export const siteSettings = defineType({
 			validation: (rule) => rule.max(80),
 		}),
 		defineField({
+			name: 'skills',
+			title: 'Skills and tools',
+			description:
+				'Software, methods and tools you use, for example CATIA or MATLAB. Shown in their own section after About. Drag to reorder. Leave empty to hide the section.',
+			type: 'array',
+			group: 'about',
+			of: [defineArrayMember({ type: 'string', validation: (rule) => rule.required().max(40) })],
+			validation: (rule) => rule.max(24).unique(),
+		}),
+		defineField({
 			name: 'about',
 			title: 'About text',
 			description: 'Shown in the About section. Leave empty to hide the whole section.',
@@ -52,6 +94,24 @@ export const siteSettings = defineType({
 			rows: 6,
 			group: 'about',
 			validation: (rule) => rule.max(600),
+		}),
+		defineField({
+			name: 'profileImage',
+			title: 'Profile photo',
+			description:
+				'Shown beside the About text. A portrait photo works best. Drag the focal point onto your face.',
+			type: 'image',
+			group: 'about',
+			options: { hotspot: true },
+			fields: [
+				defineField({
+					name: 'alt',
+					title: 'Alt text',
+					description: 'Describe the photo for people who cannot see it.',
+					type: 'string',
+					validation: (rule) => rule.required().max(200),
+				}),
+			],
 		}),
 		defineField({
 			name: 'email',

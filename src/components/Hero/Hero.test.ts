@@ -14,7 +14,7 @@ const render = (settings: SiteSettings) => container.renderToString(Hero, { prop
 describe('Hero', () => {
 	describe('given full settings', () => {
 		it('shows the name as the page heading', async () => {
-			expect(await render(full)).toMatch(/<h1[^>]*>\s*Woody\s*<\/h1>/);
+			expect(await render(full)).toMatch(/<h1[^>]*>\s*Woody Orton\s*<\/h1>/);
 		});
 
 		it('shows the statement, role line and availability line', async () => {
@@ -33,6 +33,16 @@ describe('Hero', () => {
 		});
 	});
 
+	describe('given title block details', () => {
+		it('shows each label with its value', async () => {
+			const html = await render(full);
+			for (const { label, value } of full.details) {
+				expect(html).toContain(label);
+				expect(html).toContain(value);
+			}
+		});
+	});
+
 	describe('given only the required fields', () => {
 		it('shows the name and statement without the optional lines', async () => {
 			const html = await render(minimal);
@@ -40,6 +50,7 @@ describe('Hero', () => {
 			expect(html).toContain(minimal.statement);
 			expect(html).not.toContain('Open to placements');
 			expect(html).not.toContain('undefined');
+			expect(html).not.toContain('<dl');
 		});
 	});
 

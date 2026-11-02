@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero/Hero.astro';
 import About from '../components/About/About.astro';
+import Skills from '../components/Skills/Skills.astro';
 import ProjectList from '../components/ProjectList/ProjectList.astro';
 import { getProjects, getSiteSettings } from '../utils/sanity';
 
@@ -19,7 +20,8 @@ const [projects, settings] = await Promise.all([getProjects(), getSiteSettings()
 		<ProjectList projects={projects} />
 	</section>
 
-	<About about={settings.about} />
+	<About about={settings.about} profileImage={settings.profileImage} />
+	<Skills skills={settings.skills} />
 </Base>
 
 <style>

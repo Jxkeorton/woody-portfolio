@@ -23,7 +23,7 @@ describe('Footer', () => {
 		it('shows the contact heading and the name in the copyright line', async () => {
 			const html = await render(full);
 			expect(html).toContain(full.contactHeading);
-			expect(html).toContain('Woody. All rights reserved.');
+			expect(html).toContain('Woody Orton. All rights reserved.');
 		});
 	});
 
