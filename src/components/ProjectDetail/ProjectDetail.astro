@@ -1,0 +1,151 @@
+---
+import SpecFigure from '../SpecFigure.astro';
+import type { Project } from '../../data/project.types';
+
+interface Props {
+	project: Project;
+}
+
+const { project } = Astro.props;
+---
+
+<article class="project">
+	<a class="back label" href="/#work">All projects</a>
+
+	<header class="head">
+		<h1>{project.title}</h1>
+		<dl class="title-block">
+			<div>
+				<dt class="label">System</dt>
+				<dd>{project.system}</dd>
+			</div>
+			<div>
+				<dt class="label">Year</dt>
+				<dd>{project.year}</dd>
+			</div>
+			<div>
+				<dt class="label">Context</dt>
+				<dd>{project.discipline}</dd>
+			</div>
+		</dl>
+	</header>
+
+	<div class="body">
+		<div class="prose">
+			{project.paragraphs.map((text) => <p>{text}</p>)}
+		</div>
+		<div class="figures">
+			{project.figures.map((figure) => <SpecFigure variant={figure.variant} caption={figure.caption} />)}
+		</div>
+	</div>
+</article>
+
+<style>
+	.project {
+		max-inline-size: var(--content-width);
+		margin-inline: auto;
+		padding: var(--space-l) var(--gutter) var(--space-2xl);
+	}
+
+	.back {
+		display: inline-flex;
+		align-items: center;
+		min-block-size: var(--tap-target);
+		text-decoration: none;
+		color: var(--color-text-soft);
+	}
+
+	.back::before {
+		content: '←';
+		margin-inline-end: var(--space-2xs);
+		color: var(--color-accent);
+		transition: transform var(--duration-base) var(--ease-out);
+	}
+
+	.back:hover {
+		color: var(--color-accent);
+	}
+
+	.back:hover::before {
+		transform: translateX(-0.35em);
+	}
+
+	.head {
+		display: grid;
+		gap: var(--space-l);
+		margin-block: var(--space-l) var(--space-xl);
+		padding-block-end: var(--space-l);
+		border-block-end: var(--border-hairline);
+	}
+
+	h1 {
+		max-inline-size: 16ch;
+		font-size: var(--step-4);
+		font-weight: var(--weight-display);
+		line-height: var(--leading-snug);
+		letter-spacing: -0.035em;
+		overflow-wrap: anywhere;
+	}
+
+	.title-block {
+		display: grid;
+		gap: var(--space-s);
+		margin: 0;
+	}
+
+	.title-block div {
+		display: grid;
+		gap: var(--space-3xs);
+	}
+
+	dd {
+		margin: 0;
+		color: var(--color-text-soft);
+	}
+
+	.body {
+		display: grid;
+		gap: var(--space-xl);
+	}
+
+	.prose {
+		display: grid;
+		gap: var(--space-m);
+		max-inline-size: 62ch;
+		font-size: var(--step-0);
+		line-height: var(--leading-body);
+		color: var(--color-text-soft);
+	}
+
+	.prose p:first-child {
+		font-size: var(--step-1);
+		line-height: var(--leading-snug);
+		color: var(--color-text);
+	}
+
+	.figures {
+		display: grid;
+		gap: var(--space-l);
+		align-content: start;
+	}
+
+	@media (min-width: 56rem) {
+		.head {
+			grid-template-columns: 1.5fr 1fr;
+			align-items: end;
+			gap: var(--space-2xl);
+		}
+
+		.body {
+			grid-template-columns: 1fr 1fr;
+			gap: var(--space-2xl);
+			align-items: start;
+		}
+
+		/* Drawings sit on their own column and stay in view while the text is read. */
+		.figures {
+			position: sticky;
+			inset-block-start: var(--space-m);
+		}
+	}
+</style>

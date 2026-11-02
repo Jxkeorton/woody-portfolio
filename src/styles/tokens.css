@@ -44,6 +44,7 @@
 	--step-1: clamp(1.25rem, 1.16rem + 0.45vw, 1.5rem);
 	--step-2: clamp(1.5rem, 1.32rem + 0.9vw, 2rem);
 	--step-3: clamp(2rem, 1.6rem + 2vw, 3.25rem);
+	--step-4: clamp(2.75rem, 1.9rem + 4vw, 6rem);
 	--step-5: clamp(4.5rem, 2.4rem + 10.5vw, 11rem);
 
 	--weight-display: 300;
