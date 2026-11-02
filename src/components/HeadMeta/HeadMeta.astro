@@ -1,0 +1,46 @@
+---
+import { absoluteUrl } from '../../utils/url';
+
+interface Props {
+	title: string;
+	description: string;
+	siteName: string;
+	/** Path of the current page, for example /projects/turbo-response-mapping. */
+	path: string;
+	/** Full address of the live site. Share links need it to point at the image. */
+	siteUrl?: string;
+}
+
+const { title, description, siteName, path, siteUrl } = Astro.props;
+
+const pageUrl = siteUrl && absoluteUrl(path, siteUrl);
+const imageUrl = absoluteUrl('/og-image.png', siteUrl);
+const imageAlt = `${siteName}: portfolio`;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="theme-color" content="#f5f3ec" />
+{pageUrl && <link rel="canonical" href={pageUrl} />}
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="/favicon.ico" sizes="32x32" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+{pageUrl && <meta property="og:url" content={pageUrl} />}
+<meta property="og:image" content={imageUrl} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={imageAlt} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageUrl} />
+<meta name="twitter:image:alt" content={imageAlt} />

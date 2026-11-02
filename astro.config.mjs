@@ -9,9 +9,20 @@ try {
 } catch {
 	// no .env yet
 }
-const { PUBLIC_SANITY_PROJECT_ID, PUBLIC_SANITY_DATASET } = process.env;
+const {
+	PUBLIC_SANITY_PROJECT_ID,
+	PUBLIC_SANITY_DATASET,
+	PUBLIC_SITE_URL,
+	VERCEL_PROJECT_PRODUCTION_URL,
+} = process.env;
+
+// Share links need full addresses. Set PUBLIC_SITE_URL, or rely on the production domain Vercel provides at build time.
+const site =
+	PUBLIC_SITE_URL ||
+	(VERCEL_PROJECT_PRODUCTION_URL ? `https://${VERCEL_PROJECT_PRODUCTION_URL}` : undefined);
 
 export default defineConfig({
+	site,
 	output: 'static',
 	integrations: [
 		sanity({
