@@ -6,28 +6,28 @@ Tick each step off as you go.
 
 ## 1. Initialise git and protect `main`
 
-- [ ] `git init`, then make a first commit with only `CLAUDE.md`, `SETUP.md`, `.claude/` and `skills-lock.json`. Run this one yourself in the terminal: the hook in `.claude/settings.json` blocks Claude from committing on `main`, and that includes this first commit.
-- [ ] Create the GitHub repo and add it as `origin`.
-- [ ] Do all further work on branches (`chore/scaffold` first). Never commit directly to `main`.
+- [x] `git init`, then make a first commit with only `CLAUDE.md`, `SETUP.md`, `.claude/` and `skills-lock.json`. Run this one yourself in the terminal: the hook in `.claude/settings.json` blocks Claude from committing on `main`, and that includes this first commit.
+- [x] Create the GitHub repo and add it as `origin`.
+- [x] Do all further work on branches (`chore/scaffold` first). Never commit directly to `main`.
 
 ## 2. Scaffold Astro (static, TypeScript strict)
 
-- [ ] `pnpm create astro@latest .` with the minimal template, TypeScript set to strict, and no git init.
-- [ ] Confirm `output: 'static'` in `astro.config.mjs`.
+- [x] `pnpm create astro@latest .` with the minimal template, TypeScript set to strict, and no git init.
+- [x] Confirm `output: 'static'` in `astro.config.mjs`.
 
 ## 3. Add tooling and scripts
 
-- [ ] Dev dependencies: `vitest`, `oxlint`, `oxfmt`.
-- [ ] Add these scripts to `package.json`: `dev`, `test`, `test:watch`, `lint`, `format`, `format:check`, `check`, `build`.
-- [ ] Configure Vitest for the Astro Container API (`getViteConfig` from `astro/config`).
-- [ ] Check whether oxlint and oxfmt cover `.astro` files. If there are gaps, say so and ask rather than dropping the check.
+- [x] Dev dependencies: `vitest`, `oxlint`, `oxfmt`.
+- [x] Add these scripts to `package.json`: `dev`, `test`, `test:watch`, `lint`, `format`, `format:check`, `check`, `build`.
+- [x] Configure Vitest for the Astro Container API (`getViteConfig` from `astro/config`).
+- [x] Check whether oxlint and oxfmt cover `.astro` files. **Gap found:** oxlint lints the `.astro` frontmatter, but oxfmt does not format `.astro` files at all (it silently skips them). `.astro` files are therefore not covered by `format:check` or the auto-format hook; `pnpm check` still type-checks them. Decide whether to accept this or add a formatter for `.astro`.
 
 ### Hooks to add once the scaffold exists
 
 These need the `pnpm` scripts and `oxfmt`, so they can't go in yet. Add them to `.claude/settings.json` (ask Claude to use the `update-config` skill).
 
-- [ ] **Validate before `git commit`.** PreToolUse hook on Bash. When the command is `git commit`, run `pnpm test`, `pnpm lint`, `pnpm format:check` and `pnpm check`, and block the commit (exit 2) if any fail. Leave `pnpm build` out of the gate because it's slow. The `pre-commit-validation` skill still runs it.
-- [ ] **Auto-format after edits.** PostToolUse hook on Edit and Write. Run `oxfmt` on the changed file. First check that oxfmt handles `.astro` files properly. If it doesn't, restrict the hook to the file types it does cover and tell Claude so the gap is raised, as CLAUDE.md requires.
+- [x] **Validate before `git commit`.** PreToolUse hook on Bash. When the command is `git commit`, run `pnpm test`, `pnpm lint`, `pnpm format:check` and `pnpm check`, and block the commit (exit 2) if any fail. Leave `pnpm build` out of the gate because it's slow. The `pre-commit-validation` skill still runs it.
+- [x] **Auto-format after edits.** PostToolUse hook on Edit and Write. Run `oxfmt` on the changed file. First check that oxfmt handles `.astro` files properly. If it doesn't, restrict the hook to the file types it does cover and tell Claude so the gap is raised, as CLAUDE.md requires.
 
 ## 4. Add the pre-approved Sanity dependencies
 
