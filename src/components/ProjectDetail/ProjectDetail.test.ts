@@ -10,7 +10,8 @@ beforeAll(async () => {
 	container = await AstroContainer.create();
 });
 
-const render = (project: Project) => container.renderToString(ProjectDetail, { props: { project } });
+const render = (project: Project) =>
+	container.renderToString(ProjectDetail, { props: { project } });
 
 const all = (html: string, pattern: RegExp) => [...html.matchAll(pattern)];
 const headings = (html: string) => all(html, /<h1[^>]*>([^<]*)<\/h1>/g).map((m) => m[1]);

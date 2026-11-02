@@ -1,0 +1,5 @@
+{
+  "useTabs": true,
+  "singleQuote": true,
+  "ignorePatterns": [".claude/**", ".vscode/**", "*.md", "*.json", "pnpm-lock.yaml", "dist/**", ".astro/**"]
+}
