@@ -2,6 +2,7 @@ import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { beforeAll, describe, expect, it } from 'vitest';
 import BlockRenderer from './BlockRenderer.astro';
 import { full, subsection } from './Heading/heading.fixture';
+import { minimal as textMinimal } from './RichText/richText.fixture';
 import type { HeadingBlock } from './Heading/heading.types';
 
 let container: AstroContainer;
@@ -40,6 +41,17 @@ describe('BlockRenderer', () => {
 			const blocks: HeadingBlock[] = [subsection, full];
 			const html = await render(blocks);
 			expect(html.indexOf('Ackermann angle')).toBeLessThan(html.indexOf('Steering geometry'));
+		});
+	});
+
+	describe('given a text block between two headings', () => {
+		it('renders each block in the order given', async () => {
+			const html = await render([full, textMinimal, subsection]);
+			const heading = html.indexOf('Steering geometry');
+			const text = html.indexOf('A single paragraph');
+			const sub = html.indexOf('Ackermann angle');
+			expect(heading).toBeLessThan(text);
+			expect(text).toBeLessThan(sub);
 		});
 	});
 });

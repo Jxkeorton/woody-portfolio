@@ -44,7 +44,7 @@ export const project = defineType({
 			title: 'Page content',
 			description: 'Build the project page from these parts. Drag to reorder.',
 			type: 'array',
-			of: [{ type: 'heading' }],
+			of: [{ type: 'heading' }, { type: 'richText' }],
 		}),
 	],
 	preview: { select: { title: 'title', subtitle: 'slug.current' } },

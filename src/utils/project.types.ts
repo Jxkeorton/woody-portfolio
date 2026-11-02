@@ -1,6 +1,7 @@
 import type { HeadingBlock } from '../blocks/Heading/heading.types';
+import type { RichTextBlock } from '../blocks/RichText/richText.types';
 
-export type Block = HeadingBlock;
+export type Block = HeadingBlock | RichTextBlock;
 
 /** What the project list needs. */
 export interface ProjectSummary {

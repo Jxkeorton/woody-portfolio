@@ -51,6 +51,10 @@ describe('Sanity queries', () => {
 			expect(PROJECT_QUERY).toContain('_type == "heading" => { text, level }');
 		});
 
+		it('fetches the body for rich text blocks', () => {
+			expect(PROJECT_QUERY).toContain('_type == "richText" => { body }');
+		});
+
 		it('fetches the details shown in the page title block', () => {
 			for (const field of ['system', 'year', 'context']) {
 				expect(PROJECT_QUERY).toContain(field);

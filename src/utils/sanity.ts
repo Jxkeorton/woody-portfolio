@@ -33,7 +33,8 @@ export const PROJECT_QUERY = defineQuery(`*[_type == "project" && slug.current =
 	blocks[]{
 		_type,
 		_key,
-		_type == "heading" => { text, level }
+		_type == "heading" => { text, level },
+		_type == "richText" => { body }
 	}
 }`);
 
