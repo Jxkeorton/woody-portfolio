@@ -1,0 +1,21 @@
+---
+import { PortableText } from 'astro-portabletext';
+import type { RichTextBlock } from './richText.types';
+
+type Props = Pick<RichTextBlock, 'body'>;
+
+const { body } = Astro.props;
+
+// An editor can leave a stray empty paragraph; don't render an empty block for it.
+const hasText = body.some((block) =>
+	block.children.some((child) => 'text' in child && child.text.trim() !== ''),
+);
+---
+
+{
+	hasText && (
+		<div class="prose">
+			<PortableText value={body} />
+		</div>
+	)
+}

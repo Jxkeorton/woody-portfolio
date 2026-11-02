@@ -1,6 +1,7 @@
 ---
 import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
 import Heading from './Heading/Heading.astro';
+import RichText from './RichText/RichText.astro';
 
 interface Props {
 	blocks: { _type: string; _key: string }[];
@@ -11,6 +12,7 @@ const { blocks } = Astro.props;
 // The single place that maps a Sanity `_type` to its component. Add one line per new block.
 const components: Record<string, AstroComponentFactory> = {
 	heading: Heading,
+	richText: RichText,
 };
 
 const known = blocks.filter((block) => block._type in components);
