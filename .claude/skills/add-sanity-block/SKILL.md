@@ -16,8 +16,15 @@ Follow this order every time. The block is complete only when behaviour tests pa
   - `pullQuote.schema.ts` (Sanity schema)
   - `PullQuote.test.ts` (behaviour tests)
   - `pullQuote.fixture.ts` (sample Sanity data)
+  - `pullQuote.types.ts` (the block's data shape, hand-written because this project does not use TypeGen)
   - `pullQuote.client.ts` (only if the block needs client-side JS)
-- The only shared files touched: `src/blocks/BlockRenderer.astro`, the Studio schema list, and the GROQ projection in `src/lib/sanity`.
+- A new block touches exactly these shared places (miss one and it silently does not render or cannot be added):
+  1. `src/blocks/BlockRenderer.astro`: one line in the `components` map
+  2. `src/utils/project.types.ts`: add the block to the `Block` union
+  3. `src/utils/sanity.ts`: add a `_type == "pullQuote" => { ... }` branch to the `PROJECT_QUERY` projection
+  4. `sanity/schemaTypes/index.ts`: add the schema to `blockSchemas`
+  5. `sanity/schemaTypes/project.ts`: add `{ type: 'pullQuote' }` to the `blocks` array `of: [...]`
+- Queries live in `src/utils/sanity.ts` (not `src/lib`). CLAUDE.md is the source of truth for paths.
 
 ## Steps
 
@@ -26,6 +33,7 @@ Restate what the block is for in one or two sentences. Confirm, asking the user 
 - What editors enter (fields, which are required, which are optional)
 - What visitors see, including empty and minimal states
 - Whether it needs interactivity (carousel, lightbox, toggle). Default to none: prefer semantic HTML and CSS. Use a small `.client.ts` script only if CSS cannot do it.
+- A `_type` name that Sanity does not reserve. Reserved names include `text`, `image`, `file`, `string`, `number`, `boolean`, `array`, `object`, `block`, `reference`, `slug`, `url`, `date`, `datetime` and `span`. Choose a different name (this project uses `richText` and `imageSet`). The editor-facing `title` can still be plain, for example "Text". Step 9 catches a clash.
 - Whether it duplicates an existing block. Keep the editor to roughly 6 to 8 block types, so prefer extending a block with an option over adding a near-duplicate.
 
 List the behaviours as given/when/then lines and show them to the user before writing code if anything was ambiguous.
@@ -50,7 +58,7 @@ describe('PullQuote block', () => {
 })
 ```
 
-How to test an Astro component: render it with Astro's Container API (`astro/container`; the export may be `experimental_AstroContainer` in older Astro versions), put the HTML string into the test DOM (happy-dom or jsdom), and query with Testing Library (`getByRole`, `getByText`). Vitest needs `getViteConfig` from `astro/config` so `.astro` files compile.
+How to test an Astro component: render it with Astro's Container API (`import { experimental_AstroContainer as AstroContainer } from 'astro/container'`) and assert on the returned HTML string. This project has no happy-dom, jsdom or Testing Library, and new dependencies need approval, so write small local helpers instead (for example `headings(html)` or `imgs(html)` that pull tags and attributes out with a regex). See `src/blocks/Heading/Heading.test.ts` and `src/blocks/ImageSet/ImageSet.test.ts`. `vitest.config.ts` already uses `getViteConfig` so `.astro` files compile.
 
 Always cover:
 - Full data renders correctly
@@ -92,7 +100,8 @@ Rules:
 - Add a `preview` so editors can tell blocks apart in the list.
 - Set sensible length limits and required validation.
 - Never rename an existing field without a migration plan. This only applies when changing an existing block.
-- Register the schema in the Studio schema list and add it to the project's `content` array `of: [...]`.
+- Register the schema in `sanity/schemaTypes/index.ts` and add it to the `blocks` array `of: [...]` in `sanity/schemaTypes/project.ts`.
+- Do not build an array field with no allowed types: Sanity rejects `of: []`. Add the field when its first member exists.
 
 ### 6. Component
 Create `<BlockName>.astro`:
@@ -103,26 +112,38 @@ Create `<BlockName>.astro`:
 - Render nothing for absent optional fields rather than empty elements
 - If client JS is truly needed: put logic in `<blockName>.client.ts`, import it with a `<script>` in the component, keep it dependency-free, and progressively enhance so the content works without JS
 
-If a new dependency seems necessary (for example a Portable Text renderer), stop and ask the user first.
+- Content that can be blank in a way the schema cannot prevent (an empty paragraph, an empty string) must render nothing, not an empty element a screen reader will announce. Add a test for it.
+- Blocks set no outer margin. Vertical rhythm between blocks is owned by `BlockRenderer.astro`.
+- Rich text uses `astro-portabletext` (pre-approved) inside the shared `.prose` class in `src/styles/global.css`. Scoped component CSS does not reach the elements the renderer creates, so prose styling belongs in `global.css`.
+- Images: use `imageUrl` and `imageSrcSet` from `src/utils/sanity.ts` and the pure helpers in `src/utils/image.ts`. Reserve space from the cropped size, set `object-position` from the hotspot, use the LQIP as a background, and never ask for more pixels than the original.
+- Offer editors named options (for example `layout: inset | wide | full`), never raw values.
+- Astro templates: a nested `{...}` expression after a sibling element inside a ternary does not parse; move it out. Raw generated CSS needs `<style is:inline set:html={...}>`. oxfmt does not format `.astro` files, so keep their indentation tidy by hand.
+
+If a new dependency outside the pre-approved list seems necessary, stop and ask the user first.
 
 ### 7. Wire it up
 - Add one case to `src/blocks/BlockRenderer.astro` mapping the `_type` to the component.
-- Add the block's fields to the GROQ projection in `src/lib/sanity`, selecting only what the block uses.
+- Add the block's fields to the `PROJECT_QUERY` projection in `src/utils/sanity.ts`, selecting only what the block uses, and add a query test for them in `src/utils/sanity.test.ts`.
+- Add a case to `src/blocks/BlockRenderer.test.ts` that the block renders in order with other blocks.
+- Add the type to the `Block` union and the schema to the two Studio lists (see Conventions).
 - Regenerate Sanity types if the project uses TypeGen, and fix any type errors.
 
 ### 8. Make tests pass, then refactor
 Implement the minimum to turn the tests green, then tidy with tests still green. Add a test for any behaviour discovered along the way.
 
 ### 9. Validate (do not skip steps, do not claim a step passed without running it)
+0. `node_modules/.bin/sanity schema validate` (reserved names and bad field definitions fail here, not in the unit tests)
 1. `pnpm test`
 2. `pnpm lint` and `pnpm format:check`
 3. `pnpm check` (astro check)
 4. `pnpm build`
 5. Review `git diff` and `git diff --staged` against the requirement: only block-related changes, no debug code, no `.only` in tests, no secrets, no unapproved dependencies, every stated behaviour has a test.
 
-Also check the built page: if this block added client-side JS, note how many KB, and justify it.
+Check the block with real content. You cannot write to the Sanity dataset, so ask the user to add one in the Studio (`pnpm studio`), publish it, and refresh the dev server. Say plainly in the report if you did not see it with real content. Also check the built page: if this block added client-side JS, note how many KB, and justify it.
 
 ### 10. Commit
+Branch from an up-to-date `main`. If the previous block's PR is not merged yet, either wait or stack on it, and note that a stacked PR cannot be opened once its base branch has been deleted by a merge; open it against `main` then. Do not commit generated files such as `.claude/launch.json`.
+
 Use a Conventional Commit, for example `feat(blocks): add pull quote block`. Small follow-up commits are fine (`test(pullQuote): cover missing attribution`). Do not push, open a PR or merge unless asked.
 
 ### 11. Report
