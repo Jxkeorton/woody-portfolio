@@ -12,9 +12,9 @@ const [projects, settings] = await Promise.all([getProjects(), getSiteSettings()
 <Base title={settings.siteTitle} description={settings.siteDescription}>
 	<Hero settings={settings} />
 
-	<section class="work" id="work" aria-labelledby="work-heading">
+	<section class="work" id="projects" aria-labelledby="projects-heading">
 		<div class="section-head">
-			<h2 id="work-heading">Projects</h2>
+			<h2 id="projects-heading">Projects</h2>
 			<p class="label">{projects.length} {projects.length === 1 ? 'project' : 'projects'}</p>
 		</div>
 		<ProjectList projects={projects} />

@@ -27,7 +27,7 @@ describe('Hero', () => {
 		it('offers a labelled navigation to the work, about and contact sections', async () => {
 			const html = await render(full);
 			expect(html).toContain('<nav');
-			for (const href of ['#work', '#about', '#contact']) {
+			for (const href of ['#projects', '#about', '#contact']) {
 				expect(html).toContain(`href="${href}"`);
 			}
 		});

@@ -37,7 +37,7 @@ describe('Project detail', () => {
 		});
 
 		it('links back to the project list', async () => {
-			expect(await render(fullProject)).toMatch(/<a[^>]*href="\/#work"[^>]*>All projects<\/a>/);
+			expect(await render(fullProject)).toMatch(/<a[^>]*href="\/#projects"[^>]*>All projects<\/a>/);
 		});
 	});
 
