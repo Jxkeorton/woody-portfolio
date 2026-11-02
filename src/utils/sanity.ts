@@ -21,7 +21,14 @@ export const PROJECT_IDS_QUERY = defineQuery(`*[_type == "project" && defined(sl
 export const PROJECT_QUERY = defineQuery(`*[_type == "project" && slug.current == $slug][0]{
 	title,
 	"slug": slug.current,
-	blocks[]
+	system,
+	year,
+	context,
+	blocks[]{
+		_type,
+		_key,
+		_type == "heading" => { text, level }
+	}
 }`);
 
 export const getProjectSlugs = () => sanityClient.fetch(PROJECT_IDS_QUERY);
