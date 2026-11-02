@@ -23,7 +23,7 @@ export const imageSrcSet = (source: ImageSource, widths: number[]) =>
 	widths.map((width) => `${imageUrl(source, { width })} ${width}w`).join(', ');
 
 export const PROJECTS_QUERY =
-	defineQuery(`*[_type == "project" && defined(slug.current)] | order(year desc, title asc){
+	defineQuery(`*[_type == "project" && defined(slug.current)] | order(coalesce(orderRank, "~") asc, year desc, title asc){
 	title,
 	"slug": slug.current,
 	system,
