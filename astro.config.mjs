@@ -1,8 +1,25 @@
 // @ts-check
 import { defineConfig, fontProviders } from 'astro/config';
+import sanity from '@sanity/astro';
+
+// astro.config.mjs runs before Astro loads env files, so load .env here (Node built-in, no extra dependency).
+// The fallbacks are placeholders until the client's Sanity project exists; set the real values in .env.
+try {
+	process.loadEnvFile();
+} catch {
+	// no .env yet
+}
+const { PUBLIC_SANITY_PROJECT_ID, PUBLIC_SANITY_DATASET } = process.env;
 
 export default defineConfig({
 	output: 'static',
+	integrations: [
+		sanity({
+			projectId: PUBLIC_SANITY_PROJECT_ID || 'placeholder',
+			dataset: PUBLIC_SANITY_DATASET || 'production',
+			useCdn: false,
+		}),
+	],
 	fonts: [
 		{
 			provider: fontProviders.google(),

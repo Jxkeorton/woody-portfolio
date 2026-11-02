@@ -1,0 +1,19 @@
+---
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
+
+interface Props {
+	blocks: { _type: string; _key: string }[];
+}
+
+const { blocks } = Astro.props;
+
+// The single place that maps a Sanity `_type` to its component. Add one line per new block.
+const components: Record<string, AstroComponentFactory> = {};
+---
+
+{
+	blocks.map((block) => {
+		const Block = components[block._type];
+		return Block ? <Block {...block} /> : null;
+	})
+}
