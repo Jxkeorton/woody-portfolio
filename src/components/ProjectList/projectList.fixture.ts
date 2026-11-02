@@ -1,4 +1,13 @@
-import type { ProjectSummary } from '../../utils/project.types';
+import type { CoverImage, ProjectSummary } from '../../utils/project.types';
+
+export const cover: CoverImage = {
+	alt: 'Gear train, section view',
+	hotspot: { x: 0.25, y: 0.8, width: 0.5, height: 0.5 },
+	asset: {
+		_id: 'image-cover000000000000000000000000-1600x900-jpg',
+		metadata: { lqip: 'data:image/jpeg;base64,/9j/lqip', dimensions: { width: 1600, height: 900 } },
+	},
+};
 
 export const one: ProjectSummary = {
 	title: 'Practical vehicle design',
@@ -6,6 +15,7 @@ export const one: ProjectSummary = {
 	system: 'Steering',
 	year: '2025',
 	context: 'Group project, team of six',
+	cover,
 };
 
 export const two: ProjectSummary = {

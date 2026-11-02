@@ -82,6 +82,13 @@ describe('Sanity queries', () => {
 			expect(PROJECTS_QUERY).not.toContain('blocks');
 		});
 
+		it('fetches the cover image with its alt text, focal point and size', () => {
+			expect(PROJECTS_QUERY).toContain('cover{');
+			for (const field of ['alt', 'hotspot', 'crop', 'lqip', 'dimensions']) {
+				expect(PROJECTS_QUERY).toContain(field);
+			}
+		});
+
 		it('lists the newest projects first', () => {
 			expect(PROJECTS_QUERY).toContain('order(year desc');
 		});

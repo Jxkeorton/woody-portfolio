@@ -24,7 +24,13 @@ export const PROJECTS_QUERY =
 	"slug": slug.current,
 	system,
 	year,
-	context
+	context,
+	cover{
+		alt,
+		hotspot,
+		crop,
+		asset->{ _id, metadata { lqip, dimensions { width, height } } }
+	}
 }`);
 
 export const PROJECT_QUERY = defineQuery(`*[_type == "project" && slug.current == $slug][0]{
