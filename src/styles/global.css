@@ -24,6 +24,8 @@ body {
 	font-weight: var(--weight-body);
 	line-height: var(--leading-body);
 	-webkit-font-smoothing: antialiased;
+	/* Full-bleed blocks are 100vw wide, which includes the scrollbar; don't let that scroll the page. */
+	overflow-x: clip;
 }
 
 img,

@@ -15,6 +15,9 @@ export const imageUrl = (
 	return (height ? image.height(height) : image).url();
 };
 
+export const imageSrcSet = (source: ImageSource, widths: number[]) =>
+	widths.map((width) => `${imageUrl(source, { width })} ${width}w`).join(', ');
+
 export const PROJECTS_QUERY =
 	defineQuery(`*[_type == "project" && defined(slug.current)] | order(year desc, title asc){
 	title,
@@ -34,7 +37,18 @@ export const PROJECT_QUERY = defineQuery(`*[_type == "project" && slug.current =
 		_type,
 		_key,
 		_type == "heading" => { text, level },
-		_type == "richText" => { body }
+		_type == "richText" => { body },
+		_type == "imageSet" => {
+			layout,
+			images[]{
+				_key,
+				alt,
+				caption,
+				hotspot,
+				crop,
+				asset->{ _id, metadata { lqip, dimensions { width, height } } }
+			}
+		}
 	}
 }`);
 

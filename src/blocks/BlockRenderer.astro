@@ -1,6 +1,7 @@
 ---
 import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
 import Heading from './Heading/Heading.astro';
+import ImageSet from './ImageSet/ImageSet.astro';
 import RichText from './RichText/RichText.astro';
 
 interface Props {
@@ -13,6 +14,7 @@ const { blocks } = Astro.props;
 const components: Record<string, AstroComponentFactory> = {
 	heading: Heading,
 	richText: RichText,
+	imageSet: ImageSet,
 };
 
 const known = blocks.filter((block) => block._type in components);

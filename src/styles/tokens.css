@@ -68,6 +68,7 @@
 
 	/* Layout */
 	--content-width: 68rem;
+	--inset-width: 48rem;
 	--gutter: clamp(1rem, 0.5rem + 2.5vw, 2rem);
 	--tap-target: 2.75rem;
 
