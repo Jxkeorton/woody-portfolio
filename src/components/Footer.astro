@@ -1,0 +1,48 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer id="contact">
+	<div class="inner">
+		<h2>Have a problem that needs engineering?</h2>
+		<a class="email" href="mailto:hello@example.com">hello@example.com</a>
+		<p class="label">&copy; {year} Woody. All rights reserved.</p>
+	</div>
+</footer>
+
+<style>
+	footer {
+		margin-block-start: var(--space-2xl);
+		padding: var(--space-xl) var(--gutter) var(--space-l);
+		border-block-start: var(--border-hairline);
+	}
+
+	.inner {
+		display: grid;
+		gap: var(--space-m);
+		max-inline-size: var(--content-width);
+		margin-inline: auto;
+	}
+
+	h2 {
+		max-inline-size: 16ch;
+		font-size: var(--step-3);
+		line-height: var(--leading-snug);
+		letter-spacing: -0.02em;
+	}
+
+	.email {
+		inline-size: fit-content;
+		min-block-size: var(--tap-target);
+		display: inline-flex;
+		align-items: center;
+		font-family: var(--font-mono);
+		font-size: var(--step-0);
+		color: var(--color-accent);
+		text-underline-offset: 0.35em;
+	}
+
+	.label {
+		margin-block-start: var(--space-l);
+	}
+</style>
