@@ -6,7 +6,7 @@ import Experience from '../components/Experience/Experience.astro';
 import Education from '../components/Education/Education.astro';
 import CvDownload from '../components/CvDownload/CvDownload.astro';
 import Skills from '../components/Skills/Skills.astro';
-import ProjectList from '../components/ProjectList/ProjectList.astro';
+import HomeProjects from '../components/HomeProjects/HomeProjects.astro';
 import { getCv, getProjects, getSiteSettings } from '../utils/sanity';
 
 const [projects, settings, cv] = await Promise.all([getProjects(), getSiteSettings(), getCv()]);
@@ -15,13 +15,7 @@ const [projects, settings, cv] = await Promise.all([getProjects(), getSiteSettin
 <Base title={settings.siteTitle} description={settings.siteDescription}>
 	<Hero settings={settings} />
 
-	<section class="work" id="projects" aria-labelledby="projects-heading">
-		<div class="section-head">
-			<h2 id="projects-heading">Projects</h2>
-			<p class="label">{projects.length} {projects.length === 1 ? 'project' : 'projects'}</p>
-		</div>
-		<ProjectList projects={projects} />
-	</section>
+	<HomeProjects projects={projects} />
 
 	<About about={settings.about} profileImage={settings.profileImage} />
 	<Experience entries={cv.experience} />
@@ -29,30 +23,3 @@ const [projects, settings, cv] = await Promise.all([getProjects(), getSiteSettin
 	<CvDownload file={cv.cvFile} name={settings.name} />
 	<Skills skills={settings.skills} />
 </Base>
-
-<style>
-	section {
-		max-inline-size: var(--content-width);
-		margin-inline: auto;
-		padding-inline: var(--gutter);
-	}
-
-	/* Work index */
-	.work {
-		padding-block-start: var(--space-2xl);
-	}
-
-	.section-head {
-		display: flex;
-		align-items: baseline;
-		justify-content: space-between;
-		gap: var(--space-m);
-		margin-block-end: var(--space-l);
-	}
-
-	h2 {
-		font-size: var(--step-3);
-		letter-spacing: -0.03em;
-		line-height: var(--leading-snug);
-	}
-</style>

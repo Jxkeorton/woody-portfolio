@@ -1,0 +1,178 @@
+---
+import { imageUrl } from '../../utils/sanity';
+import { objectPosition } from '../../utils/image';
+import type { ProjectSummary } from '../../utils/project.types';
+
+interface Props {
+	projects: ProjectSummary[];
+}
+
+const { projects } = Astro.props;
+
+// Tiles are 4:3. Three sizes cover one, two and three columns on normal and high-density screens.
+const WIDTHS = [480, 800, 1200];
+const RATIO = 3 / 4;
+
+const tiles = projects.map((project) => {
+	const { cover } = project;
+	if (!cover) return { project, image: null };
+	const source = { asset: cover.asset, hotspot: cover.hotspot, crop: cover.crop };
+	const widest = WIDTHS[WIDTHS.length - 1]!;
+	return {
+		project,
+		image: {
+			alt: cover.alt,
+			src: imageUrl(source, { width: 800, height: Math.round(800 * RATIO) }),
+			srcset: WIDTHS.map(
+				(width) => `${imageUrl(source, { width, height: Math.round(width * RATIO) })} ${width}w`,
+			).join(', '),
+			width: widest,
+			height: Math.round(widest * RATIO),
+			style: [
+				cover.asset.metadata.lqip && `background-image: url('${cover.asset.metadata.lqip}')`,
+				objectPosition(cover.hotspot) && `object-position: ${objectPosition(cover.hotspot)}`,
+			]
+				.filter(Boolean)
+				.join('; '),
+		},
+	};
+});
+---
+
+{
+	tiles.length > 0 ? (
+		<ul class="grid">
+			{tiles.map(({ project, image }) => (
+				<li>
+					<a class="tile" href={`/projects/${project.slug}`}>
+						<span class="plate">
+							{image ? (
+								<img
+									src={image.src}
+									srcset={image.srcset}
+									sizes="(min-width: 56rem) 22rem, (min-width: 36rem) 50vw, 100vw"
+									width={image.width}
+									height={image.height}
+									alt={image.alt}
+									loading="lazy"
+									decoding="async"
+									style={image.style || undefined}
+								/>
+							) : (
+								<span class="blank label" aria-hidden="true">
+									{project.system}
+								</span>
+							)}
+						</span>
+						<span class="caption">
+							<span class="meta label">
+								<span>{project.system}</span>
+								<span>{project.year}</span>
+							</span>
+							<span class="title">{project.title}</span>
+						</span>
+					</a>
+				</li>
+			))}
+		</ul>
+	) : (
+		<p class="empty">Projects will appear here soon.</p>
+	)
+}
+
+<style>
+	.grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--space-l) var(--space-m);
+		padding: 0;
+		list-style: none;
+	}
+
+	@media (min-width: 36rem) {
+		.grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (min-width: 56rem) {
+		.grid {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+
+	.tile {
+		display: grid;
+		gap: var(--space-xs);
+		text-decoration: none;
+		color: inherit;
+	}
+
+	.plate {
+		display: block;
+		overflow: hidden;
+		aspect-ratio: 4 / 3;
+		background: var(--color-surface);
+		border: var(--border-hairline);
+	}
+
+	.plate img {
+		display: block;
+		inline-size: 100%;
+		block-size: 100%;
+		object-fit: cover;
+		background-size: cover;
+		transition: transform var(--duration-base) var(--ease-out);
+	}
+
+	.blank {
+		display: grid;
+		place-items: center;
+		block-size: 100%;
+		padding: var(--space-s);
+		text-align: center;
+	}
+
+	.caption {
+		display: grid;
+		gap: var(--space-3xs);
+	}
+
+	.meta {
+		display: flex;
+		justify-content: space-between;
+		gap: var(--space-s);
+	}
+
+	.title {
+		font-size: var(--step-1);
+		font-weight: var(--weight-display);
+		line-height: var(--leading-snug);
+		letter-spacing: -0.02em;
+		overflow-wrap: anywhere;
+		transition: color var(--duration-fast) var(--ease-out);
+	}
+
+	.tile:hover .title,
+	.tile:focus-visible .title {
+		color: var(--color-accent);
+	}
+
+	.tile:hover .plate,
+	.tile:focus-visible .plate {
+		border-color: var(--color-accent);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.tile:hover img,
+		.tile:focus-visible img {
+			transform: scale(1.03);
+		}
+	}
+
+	.empty {
+		padding-block: var(--space-m);
+		border-block: var(--border-hairline);
+		color: var(--color-text-muted);
+	}
+</style>

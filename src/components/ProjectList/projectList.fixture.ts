@@ -34,3 +34,10 @@ export const longTitle: ProjectSummary = {
 };
 
 export const projects = [one, two];
+
+/** Six projects, enough to need the home page's limit. */
+export const sixProjects: ProjectSummary[] = [1, 2, 3, 4, 5, 6].map((n) => ({
+	...one,
+	slug: `project-${n}`,
+	title: `Project ${n}`,
+}));

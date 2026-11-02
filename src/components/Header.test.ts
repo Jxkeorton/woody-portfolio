@@ -25,9 +25,9 @@ describe('Header', () => {
 	});
 
 	describe('given the main navigation', () => {
-		it('links to the projects section, labelled Projects', async () => {
+		it('links to the projects page, labelled Projects', async () => {
 			const html = await container.renderToString(Header, { props: { name: 'Woody Orton' } });
-			expect(html).toMatch(/<a[^>]*href="\/#projects"[^>]*>\s*Projects\s*<\/a>/);
+			expect(html).toMatch(/<a[^>]*href="\/projects"[^>]*>\s*Projects\s*<\/a>/);
 			expect(html).not.toMatch(/>\s*Work\s*</);
 		});
 	});

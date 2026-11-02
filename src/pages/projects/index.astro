@@ -1,0 +1,39 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProjectGrid from '../../components/ProjectGrid/ProjectGrid.astro';
+import { getProjects, getSiteSettings } from '../../utils/sanity';
+
+const [projects, { name, siteDescription }] = await Promise.all([getProjects(), getSiteSettings()]);
+---
+
+<Base title={`Projects · ${name}`} description={siteDescription}>
+	<section aria-labelledby="projects-heading">
+		<div class="section-head">
+			<h1 id="projects-heading">Projects</h1>
+			<p class="label">{projects.length} {projects.length === 1 ? 'project' : 'projects'}</p>
+		</div>
+		<ProjectGrid projects={projects} />
+	</section>
+</Base>
+
+<style>
+	section {
+		max-inline-size: var(--content-width);
+		margin-inline: auto;
+		padding: var(--space-xl) var(--gutter) 0;
+	}
+
+	.section-head {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: var(--space-m);
+		margin-block-end: var(--space-l);
+	}
+
+	h1 {
+		font-size: var(--step-4);
+		letter-spacing: -0.03em;
+		line-height: var(--leading-snug);
+	}
+</style>
