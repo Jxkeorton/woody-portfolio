@@ -1,0 +1,55 @@
+---
+interface Props {
+	about?: string;
+}
+
+const { about } = Astro.props;
+---
+
+{
+	about && (
+		<section class="about" id="about" aria-labelledby="about-heading">
+			<h2 id="about-heading">About</h2>
+			<p>{about}</p>
+		</section>
+	)
+}
+
+<style>
+	section {
+		max-inline-size: var(--content-width);
+		margin-inline: auto;
+		padding-inline: var(--gutter);
+	}
+
+	/* About */
+	.about {
+		display: grid;
+		gap: var(--space-s);
+		padding-block-start: var(--space-2xl);
+	}
+
+	@media (min-width: 56rem) {
+		.about {
+			grid-template-columns: 1fr 2fr;
+			gap: var(--space-2xl);
+		}
+	}
+
+	.about h2 {
+		font-family: var(--font-mono);
+		font-size: var(--step--2);
+		font-weight: 500;
+		letter-spacing: var(--tracking-label);
+		line-height: var(--leading-body);
+		text-transform: uppercase;
+		color: var(--color-text-muted);
+	}
+
+	.about p {
+		max-inline-size: 36ch;
+		font-size: var(--step-2);
+		line-height: var(--leading-snug);
+		color: var(--color-text-soft);
+	}
+</style>

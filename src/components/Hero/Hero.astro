@@ -1,0 +1,134 @@
+---
+import type { SiteSettings } from '../../utils/siteSettings.types';
+
+interface Props {
+	settings: Pick<SiteSettings, 'name' | 'statement' | 'roleLine' | 'availabilityLine'>;
+}
+
+const { name, statement, roleLine, availabilityLine } = Astro.props.settings;
+
+const startLinks = [
+	{ href: '#work', label: 'See my projects' },
+	{ href: '#about', label: 'Read about me' },
+	{ href: '#contact', label: 'Email me' },
+];
+const labelLines = [roleLine, availabilityLine].filter(Boolean);
+---
+
+<section class="hero">
+	<h1>{name}</h1>
+	<div class="hero-grid">
+		<div class="statement">
+			<p>{statement}</p>
+			{
+				labelLines.length > 0 && (
+					<p class="label">
+						{labelLines.map((line, i) => (
+							<>
+								{i > 0 && <br />}
+								{line}
+							</>
+						))}
+					</p>
+				)
+			}
+		</div>
+		<nav class="start" aria-labelledby="start-label">
+			<p class="label" id="start-label">Where you can start</p>
+			<ul>
+				{
+					startLinks.map(({ href, label }) => (
+						<li>
+							<a href={href}>{label}</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+	</div>
+</section>
+
+<style>
+	section {
+		max-inline-size: var(--content-width);
+		margin-inline: auto;
+		padding-inline: var(--gutter);
+	}
+
+	/* Hero */
+	.hero {
+		padding-block: var(--space-xl) 0;
+	}
+
+	h1 {
+		font-size: var(--step-5);
+		font-weight: var(--weight-hero);
+		line-height: var(--leading-tight);
+		letter-spacing: var(--tracking-display);
+		color: var(--color-text-soft);
+		margin-inline-start: -0.04em;
+	}
+
+	.hero-grid {
+		display: grid;
+		gap: var(--space-xl);
+		margin-block-start: var(--space-xl);
+	}
+
+	@media (min-width: 56rem) {
+		.hero-grid {
+			grid-template-columns: 1.2fr 1fr;
+			gap: var(--space-2xl);
+		}
+	}
+
+	.statement {
+		display: grid;
+		gap: var(--space-m);
+		align-content: start;
+	}
+
+	.statement p:first-child {
+		max-inline-size: 22ch;
+		font-size: var(--step-2);
+		line-height: var(--leading-snug);
+		color: var(--color-text-soft);
+	}
+
+	.start ul {
+		display: grid;
+		margin-block-start: var(--space-s);
+		padding: 0;
+		list-style: none;
+		border-block-start: var(--border-hairline);
+	}
+
+	.start li {
+		border-block-end: var(--border-hairline);
+	}
+
+	.start a {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		min-block-size: var(--tap-target);
+		padding-block: var(--space-xs);
+		text-decoration: none;
+		color: var(--color-text-soft);
+		transition: color var(--duration-fast) var(--ease-out);
+	}
+
+	.start a::after {
+		content: '→';
+		color: var(--color-accent);
+		transition: transform var(--duration-base) var(--ease-out);
+	}
+
+	.start a:hover {
+		color: var(--color-accent);
+	}
+
+	.start a:hover::after {
+		transform: translateX(0.35em);
+	}
+</style>

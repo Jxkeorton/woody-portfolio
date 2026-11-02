@@ -2,6 +2,8 @@ import { sanityClient } from 'sanity:client';
 import { createImageUrlBuilder } from '@sanity/image-url';
 import { defineQuery } from 'groq';
 import type { Block, Project, ProjectSummary } from './project.types';
+import { resolveSiteSettings } from './siteSettings';
+import type { RawSiteSettings } from './siteSettings.types';
 
 const builder = createImageUrlBuilder(sanityClient);
 
@@ -62,3 +64,18 @@ export const getProjects = () => sanityClient.fetch<ProjectSummary[]>(PROJECTS_Q
 
 export const getProject = async (slug: string) =>
 	toProject(await sanityClient.fetch<RawProject | null>(PROJECT_QUERY, { slug }));
+
+export const SITE_SETTINGS_QUERY = defineQuery(`*[_type == "siteSettings"][0]{
+	name,
+	statement,
+	roleLine,
+	availabilityLine,
+	about,
+	email,
+	contactHeading,
+	siteTitle,
+	siteDescription
+}`);
+
+export const getSiteSettings = async () =>
+	resolveSiteSettings(await sanityClient.fetch<RawSiteSettings | null>(SITE_SETTINGS_QUERY));
