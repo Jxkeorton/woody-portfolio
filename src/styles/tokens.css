@@ -47,6 +47,7 @@
 	--step-5: clamp(4.5rem, 2.4rem + 10.5vw, 11rem);
 
 	--weight-display: 300;
+	--weight-hero: 500;
 	--weight-body: 400;
 	--leading-tight: 0.88;
 	--leading-snug: 1.2;

@@ -7,7 +7,7 @@ const projects = [
 	{
 		title: 'Ventilated brake rotor',
 		system: 'Brakes',
-		discipline: 'Thermal simulation, design for manufacture',
+		discipline: 'Formula Student team. Thermal simulation in ANSYS, design for manufacture',
 		year: '2025',
 		variant: 'rotor',
 		caption: 'Rotor, front view. Ø 340 mm',
@@ -15,7 +15,7 @@ const projects = [
 	{
 		title: 'Turbo response mapping',
 		system: 'Powertrain',
-		discipline: 'Calibration, dyno testing',
+		discipline: 'Final-year project. Engine calibration and dyno testing',
 		year: '2024',
 		variant: 'curve',
 		caption: 'Torque against rpm, peak marked',
@@ -23,7 +23,7 @@ const projects = [
 	{
 		title: 'Lightweight piston and rod',
 		system: 'Engine',
-		discipline: 'FEA, materials selection',
+		discipline: 'Coursework. Finite element analysis and materials selection',
 		year: '2023',
 		variant: 'section',
 		caption: 'Piston and rod, section view',
@@ -31,7 +31,7 @@ const projects = [
 	{
 		title: 'Close-ratio gearset',
 		system: 'Transmission',
-		discipline: 'Gear design, durability testing',
+		discipline: 'Coursework. Gear design and fatigue calculations',
 		year: '2022',
 		variant: 'gear',
 		caption: 'Spur gear, module 2.5, 40 teeth',
@@ -39,25 +39,25 @@ const projects = [
 ] as const;
 
 const startLinks = [
-	{ href: '#work', label: 'Browse the projects' },
-	{ href: '#about', label: 'Read how I work' },
-	{ href: '#contact', label: 'Get in touch' },
+	{ href: '#work', label: 'See my projects' },
+	{ href: '#about', label: 'Read about me' },
+	{ href: '#contact', label: 'Email me' },
 ];
 ---
 
 <Base
-	title="Woody · Automotive engineer"
-	description="Portfolio of Woody, an automotive engineer working across brakes, powertrain and transmission."
+	title="Woody · Automotive engineering student"
+	description="Portfolio of Woody, an automotive engineering student looking for a placement or graduate role. Projects in brakes, powertrain and transmission."
 >
 	<section class="hero">
 		<h1>Woody</h1>
 		<div class="hero-grid">
 			<div class="statement">
 				<p>
-					I turn vehicle problems into parts that work: measured on the dyno, proven in simulation, and
-					built to be made.
+					I'm an automotive engineering student who likes to test an idea, measure what happened and fix
+					what didn't work.
 				</p>
-				<p class="label">Automotive engineer<br />Powertrain, brakes and transmission</p>
+				<p class="label">Automotive engineering student<br />Open to placements and graduate roles</p>
 			</div>
 			<nav class="start" aria-labelledby="start-label">
 				<p class="label" id="start-label">Where you can start</p>
@@ -76,7 +76,7 @@ const startLinks = [
 
 	<section class="work" id="work" aria-labelledby="work-heading">
 		<div class="section-head">
-			<h2 id="work-heading">Selected work</h2>
+			<h2 id="work-heading">Projects</h2>
 			<p class="label">{projects.length} projects</p>
 		</div>
 		<div class="index">
@@ -114,9 +114,9 @@ const startLinks = [
 	<section class="about" id="about" aria-labelledby="about-heading">
 		<h2 id="about-heading">About</h2>
 		<p>
-			Twelve years across race and road programmes. I like the unglamorous part of engineering: the
-			tolerance stack, the heat soak, the test that fails at hour nine. Every project here shows the
-			numbers as well as the finished part.
+			I'm in my third year of an automotive engineering degree. I learn the most when something goes
+			wrong: a simulation that disagreed with the test, a design that couldn't be machined. Each
+			project here shows the method and the numbers, not just the result.
 		</p>
 	</section>
 </Base>
@@ -135,6 +135,7 @@ const startLinks = [
 
 	h1 {
 		font-size: var(--step-5);
+		font-weight: var(--weight-hero);
 		line-height: var(--leading-tight);
 		letter-spacing: var(--tracking-display);
 		color: var(--color-text-soft);
