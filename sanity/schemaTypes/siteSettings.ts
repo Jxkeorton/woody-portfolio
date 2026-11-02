@@ -89,7 +89,8 @@ export const siteSettings = defineType({
 		defineField({
 			name: 'about',
 			title: 'About text',
-			description: 'Shown in the About section. Leave empty to hide the whole section.',
+			description:
+				'Shown in the About section. If you leave it empty, the standard text about your degree and placement search is shown.',
 			type: 'text',
 			rows: 6,
 			group: 'about',

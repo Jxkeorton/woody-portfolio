@@ -44,8 +44,15 @@ describe('Site settings with defaults', () => {
 			expect(resolveSiteSettings(null)).toEqual(DEFAULT_SITE_SETTINGS);
 		});
 
-		it('has no email, so no made-up address is shown', () => {
-			expect(resolveSiteSettings(null).email).toBeUndefined();
+		it('uses Woody’s email address', () => {
+			expect(resolveSiteSettings(null).email).toBe('woodyorton@outlook.com');
+		});
+
+		it('uses the default About text', () => {
+			const { about } = resolveSiteSettings(null);
+			expect(about).toContain('second-year BEng Automotive Engineering student');
+			expect(about).toContain('Loughborough University');
+			expect(about?.length).toBeLessThanOrEqual(600);
 		});
 	});
 
@@ -92,6 +99,8 @@ describe('Site settings with defaults', () => {
 			expect(settings.name).toBe(DEFAULT_SITE_SETTINGS.name);
 			expect(settings.statement).toBe(DEFAULT_SITE_SETTINGS.statement);
 			expect(settings.contactHeading).toBe(DEFAULT_SITE_SETTINGS.contactHeading);
+			expect(settings.email).toBe(DEFAULT_SITE_SETTINGS.email);
+			expect(settings.about).toBe(DEFAULT_SITE_SETTINGS.about);
 			expect(settings.siteTitle).toBe(DEFAULT_SITE_SETTINGS.siteTitle);
 			expect(settings.siteDescription).toBe(DEFAULT_SITE_SETTINGS.siteDescription);
 		});
@@ -104,17 +113,16 @@ describe('Site settings with defaults', () => {
 		it('leaves the optional fields out', () => {
 			expect(settings.roleLine).toBeUndefined();
 			expect(settings.availabilityLine).toBeUndefined();
-			expect(settings.about).toBeUndefined();
-			expect(settings.email).toBeUndefined();
 			expect(settings.profileImage).toBeUndefined();
 		});
 	});
 
 	describe('given a document with only the required fields', () => {
-		it('keeps them and leaves the rest out', () => {
+		it('keeps them, and uses the default About text and email for the rest', () => {
 			const settings = resolveSiteSettings(minimal);
 			expect(settings.name).toBe(minimal.name);
-			expect(settings.about).toBeUndefined();
+			expect(settings.about).toBe(DEFAULT_SITE_SETTINGS.about);
+			expect(settings.email).toBe(DEFAULT_SITE_SETTINGS.email);
 			expect(settings.profileImage).toBeUndefined();
 		});
 	});
