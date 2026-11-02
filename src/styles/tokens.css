@@ -1,0 +1,82 @@
+/*
+  Design tokens: the single source of visual decisions.
+  Direction: warm paper, ink, one racing-green accent. Light serif for voice,
+  mono for spec-sheet labels.
+
+  Breakpoints (custom properties can't be used in media queries):
+    sm 40rem (640px) | md 56rem (896px) | lg 72rem (1152px)
+*/
+
+:root {
+	/* Primitives */
+	--paper-50: #f5f3ec;
+	--paper-100: #eceae0;
+	--paper-200: #e0ddd0;
+	--paper-300: #c9c6b6;
+	--ink-900: #1c1f1a;
+	--ink-700: #3d403a;
+	--ink-500: #565a50;
+	--green-700: #0f4a35;
+	--green-600: #17614a;
+	--green-100: #d7e4dc;
+
+	/* Colour: semantic */
+	--color-bg: var(--paper-50);
+	--color-bg-deep: var(--paper-200);
+	--color-surface: var(--paper-100);
+	--color-text: var(--ink-900);
+	--color-text-soft: var(--ink-700);
+	--color-text-muted: var(--ink-500);
+	--color-accent: var(--green-700);
+	--color-accent-soft: var(--green-100);
+	--color-border: var(--paper-300);
+	--color-focus: var(--green-600);
+
+	/* Type: families */
+	--font-display: var(--font-newsreader), 'Iowan Old Style', Georgia, serif;
+	--font-body: var(--font-newsreader), 'Iowan Old Style', Georgia, serif;
+	--font-mono: var(--font-plex-mono), ui-monospace, 'SF Mono', Menlo, monospace;
+
+	/* Type: fluid scale */
+	--step--2: clamp(0.6875rem, 0.67rem + 0.08vw, 0.75rem);
+	--step--1: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+	--step-0: clamp(1.0625rem, 1.03rem + 0.17vw, 1.1875rem);
+	--step-1: clamp(1.25rem, 1.16rem + 0.45vw, 1.5rem);
+	--step-2: clamp(1.5rem, 1.32rem + 0.9vw, 2rem);
+	--step-3: clamp(2rem, 1.6rem + 2vw, 3.25rem);
+	--step-5: clamp(4.5rem, 2.4rem + 10.5vw, 11rem);
+
+	--weight-display: 300;
+	--weight-hero: 500;
+	--weight-body: 400;
+	--leading-tight: 0.88;
+	--leading-snug: 1.2;
+	--leading-body: 1.55;
+	--tracking-display: -0.045em;
+	--tracking-label: 0.08em;
+
+	/* Space */
+	--space-3xs: 0.25rem;
+	--space-2xs: 0.5rem;
+	--space-xs: 0.75rem;
+	--space-s: 1rem;
+	--space-m: 1.5rem;
+	--space-l: clamp(2rem, 1.5rem + 2vw, 3rem);
+	--space-xl: clamp(3rem, 2rem + 4vw, 5.5rem);
+	--space-2xl: clamp(4.5rem, 3rem + 6vw, 9rem);
+
+	/* Layout */
+	--content-width: 68rem;
+	--gutter: clamp(1rem, 0.5rem + 2.5vw, 2rem);
+	--tap-target: 2.75rem;
+
+	/* Shape */
+	--radius-pill: 999px;
+	--radius-s: 0.375rem;
+	--border-hairline: 1px solid var(--color-border);
+
+	/* Motion */
+	--ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+	--duration-fast: 160ms;
+	--duration-base: 320ms;
+}

@@ -1,0 +1,353 @@
+---
+import Base from '../layouts/Base.astro';
+import SpecFigure from '../components/SpecFigure.astro';
+
+// Placeholder content until Sanity is connected.
+const projects = [
+	{
+		title: 'Ventilated brake rotor',
+		system: 'Brakes',
+		discipline: 'Formula Student team. Thermal simulation in ANSYS, design for manufacture',
+		year: '2025',
+		variant: 'rotor',
+		caption: 'Rotor, front view. Ø 340 mm',
+	},
+	{
+		title: 'Turbo response mapping',
+		system: 'Powertrain',
+		discipline: 'Final-year project. Engine calibration and dyno testing',
+		year: '2024',
+		variant: 'curve',
+		caption: 'Torque against rpm, peak marked',
+	},
+	{
+		title: 'Lightweight piston and rod',
+		system: 'Engine',
+		discipline: 'Coursework. Finite element analysis and materials selection',
+		year: '2023',
+		variant: 'section',
+		caption: 'Piston and rod, section view',
+	},
+	{
+		title: 'Close-ratio gearset',
+		system: 'Transmission',
+		discipline: 'Coursework. Gear design and fatigue calculations',
+		year: '2022',
+		variant: 'gear',
+		caption: 'Spur gear, module 2.5, 40 teeth',
+	},
+] as const;
+
+const startLinks = [
+	{ href: '#work', label: 'See my projects' },
+	{ href: '#about', label: 'Read about me' },
+	{ href: '#contact', label: 'Email me' },
+];
+---
+
+<Base
+	title="Woody · Automotive engineering student"
+	description="Portfolio of Woody, an automotive engineering student looking for a placement or graduate role. Projects in brakes, powertrain and transmission."
+>
+	<section class="hero">
+		<h1>Woody</h1>
+		<div class="hero-grid">
+			<div class="statement">
+				<p>
+					I'm an automotive engineering student who likes to test an idea, measure what happened and fix
+					what didn't work.
+				</p>
+				<p class="label">Automotive engineering student<br />Open to placements and graduate roles</p>
+			</div>
+			<nav class="start" aria-labelledby="start-label">
+				<p class="label" id="start-label">Where you can start</p>
+				<ul>
+					{
+						startLinks.map(({ href, label }) => (
+							<li>
+								<a href={href}>{label}</a>
+							</li>
+						))
+					}
+				</ul>
+			</nav>
+		</div>
+	</section>
+
+	<section class="work" id="work" aria-labelledby="work-heading">
+		<div class="section-head">
+			<h2 id="work-heading">Projects</h2>
+			<p class="label">{projects.length} projects</p>
+		</div>
+		<div class="index">
+			<ul class="rows">
+				<li class="row row-head label" aria-hidden="true">
+					<span>Project</span>
+					<span>System</span>
+					<span>Year</span>
+				</li>
+				{
+					projects.map((project) => (
+						<li>
+							<a class="row" href="#work">
+								<span class="title">{project.title}</span>
+								<span class="system label">{project.system}</span>
+								<span class="year label">{project.year}</span>
+								<span class="discipline">{project.discipline}</span>
+							</a>
+						</li>
+					))
+				}
+			</ul>
+			<div class="previews" aria-hidden="true">
+				{
+					projects.map((project) => (
+						<div class="preview">
+							<SpecFigure variant={project.variant} caption={project.caption} />
+						</div>
+					))
+				}
+			</div>
+		</div>
+	</section>
+
+	<section class="about" id="about" aria-labelledby="about-heading">
+		<h2 id="about-heading">About</h2>
+		<p>
+			I'm in my third year of an automotive engineering degree. I learn the most when something goes
+			wrong: a simulation that disagreed with the test, a design that couldn't be machined. Each
+			project here shows the method and the numbers, not just the result.
+		</p>
+	</section>
+</Base>
+
+<style>
+	section {
+		max-inline-size: var(--content-width);
+		margin-inline: auto;
+		padding-inline: var(--gutter);
+	}
+
+	/* Hero */
+	.hero {
+		padding-block: var(--space-xl) 0;
+	}
+
+	h1 {
+		font-size: var(--step-5);
+		font-weight: var(--weight-hero);
+		line-height: var(--leading-tight);
+		letter-spacing: var(--tracking-display);
+		color: var(--color-text-soft);
+		margin-inline-start: -0.04em;
+	}
+
+	.hero-grid {
+		display: grid;
+		gap: var(--space-xl);
+		margin-block-start: var(--space-xl);
+	}
+
+	@media (min-width: 56rem) {
+		.hero-grid {
+			grid-template-columns: 1.2fr 1fr;
+			gap: var(--space-2xl);
+		}
+	}
+
+	.statement {
+		display: grid;
+		gap: var(--space-m);
+		align-content: start;
+	}
+
+	.statement p:first-child {
+		max-inline-size: 22ch;
+		font-size: var(--step-2);
+		line-height: var(--leading-snug);
+		color: var(--color-text-soft);
+	}
+
+	.start ul {
+		display: grid;
+		margin-block-start: var(--space-s);
+		padding: 0;
+		list-style: none;
+		border-block-start: var(--border-hairline);
+	}
+
+	.start li {
+		border-block-end: var(--border-hairline);
+	}
+
+	.start a {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		min-block-size: var(--tap-target);
+		padding-block: var(--space-xs);
+		text-decoration: none;
+		color: var(--color-text-soft);
+		transition: color var(--duration-fast) var(--ease-out);
+	}
+
+	.start a::after {
+		content: '→';
+		color: var(--color-accent);
+		transition: transform var(--duration-base) var(--ease-out);
+	}
+
+	.start a:hover {
+		color: var(--color-accent);
+	}
+
+	.start a:hover::after {
+		transform: translateX(0.35em);
+	}
+
+	/* Work index */
+	.work {
+		padding-block-start: var(--space-2xl);
+	}
+
+	.section-head {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: var(--space-m);
+		margin-block-end: var(--space-l);
+	}
+
+	h2 {
+		font-size: var(--step-3);
+		letter-spacing: -0.03em;
+		line-height: var(--leading-snug);
+	}
+
+	.index {
+		display: grid;
+		gap: var(--space-xl);
+	}
+
+	@media (min-width: 56rem) {
+		.index {
+			grid-template-columns: 1.5fr 1fr;
+			align-items: start;
+			gap: var(--space-2xl);
+		}
+	}
+
+	.rows {
+		padding: 0;
+		list-style: none;
+	}
+
+	.row {
+		display: grid;
+		grid-template-columns: 1fr auto auto;
+		column-gap: var(--space-m);
+		row-gap: var(--space-3xs);
+		align-items: baseline;
+		padding-block: var(--space-m);
+		border-block-end: var(--border-hairline);
+		text-decoration: none;
+		color: inherit;
+		transition: padding-inline var(--duration-base) var(--ease-out);
+	}
+
+	.row-head {
+		padding-block: 0 var(--space-xs);
+	}
+
+	.row-head span:last-child,
+	.year {
+		min-inline-size: 4ch;
+		text-align: end;
+	}
+
+	.title {
+		font-size: var(--step-2);
+		font-weight: var(--weight-display);
+		line-height: var(--leading-snug);
+		letter-spacing: -0.02em;
+		transition: color var(--duration-fast) var(--ease-out);
+	}
+
+	.discipline {
+		grid-column: 1 / -1;
+		font-size: var(--step--1);
+		color: var(--color-text-muted);
+	}
+
+	a.row:hover,
+	a.row:focus-visible {
+		padding-inline: var(--space-s);
+		background: var(--color-surface);
+	}
+
+	a.row:hover .title,
+	a.row:focus-visible .title {
+		color: var(--color-accent);
+	}
+
+	/* Previews: shown on wide screens only, driven by row hover/focus with :has() */
+	.previews {
+		display: none;
+	}
+
+	@media (min-width: 56rem) {
+		.previews {
+			position: sticky;
+			inset-block-start: var(--space-l);
+			display: grid;
+			padding: var(--space-m);
+			border: var(--border-hairline);
+			background: var(--color-surface);
+		}
+
+		.preview {
+			grid-area: 1 / 1;
+			opacity: 0;
+			transition: opacity var(--duration-base) var(--ease-out);
+		}
+
+		.index:not(:has(a.row:is(:hover, :focus-visible))) .preview:nth-child(1),
+		.index:has(li:nth-child(2) a.row:is(:hover, :focus-visible)) .preview:nth-child(1),
+		.index:has(li:nth-child(3) a.row:is(:hover, :focus-visible)) .preview:nth-child(2),
+		.index:has(li:nth-child(4) a.row:is(:hover, :focus-visible)) .preview:nth-child(3),
+		.index:has(li:nth-child(5) a.row:is(:hover, :focus-visible)) .preview:nth-child(4) {
+			opacity: 1;
+		}
+	}
+
+	/* About */
+	.about {
+		display: grid;
+		gap: var(--space-s);
+		padding-block-start: var(--space-2xl);
+	}
+
+	@media (min-width: 56rem) {
+		.about {
+			grid-template-columns: 1fr 2fr;
+			gap: var(--space-2xl);
+		}
+	}
+
+	.about h2 {
+		font-family: var(--font-mono);
+		font-size: var(--step--2);
+		font-weight: 500;
+		letter-spacing: var(--tracking-label);
+		line-height: var(--leading-body);
+		text-transform: uppercase;
+		color: var(--color-text-muted);
+	}
+
+	.about p {
+		max-inline-size: 36ch;
+		font-size: var(--step-2);
+		line-height: var(--leading-snug);
+		color: var(--color-text-soft);
+	}
+</style>
