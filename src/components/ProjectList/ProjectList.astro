@@ -1,4 +1,6 @@
 ---
+import { imageUrl } from '../../utils/sanity';
+import { objectPosition } from '../../utils/image';
 import type { ProjectSummary } from '../../utils/project.types';
 
 interface Props {
@@ -6,33 +8,100 @@ interface Props {
 }
 
 const { projects } = Astro.props;
+
+const PREVIEW = { width: 800, height: 600 };
+
+const previews = projects.map(({ cover }) =>
+	cover
+		? {
+				src: imageUrl(
+					{ asset: cover.asset, hotspot: cover.hotspot, crop: cover.crop },
+					PREVIEW,
+				),
+				style: [
+					cover.asset.metadata.lqip && `background-image: url('${cover.asset.metadata.lqip}')`,
+					objectPosition(cover.hotspot) && `object-position: ${objectPosition(cover.hotspot)}`,
+				]
+					.filter(Boolean)
+					.join('; '),
+			}
+		: null,
+);
+
+// Hovering or focusing a row shows its preview. Until then the first project's preview shows.
+// Generated per project so the list can be any length. Rows start at li 2 (li 1 is the column heads).
+const active = ':is(:hover, :focus-visible)';
+const showPreview = [
+	`.index:not(:has(a.row${active})) .preview:nth-child(1)`,
+	...projects.map(
+		(_, i) => `.index:has(li:nth-child(${i + 2}) a.row${active}) .preview:nth-child(${i + 1})`,
+	),
+].join(',\n');
+const hasPreviews = previews.some(Boolean);
+const previewRules = `@media (min-width: 56rem) {\n${showPreview} {\n\topacity: 1;\n}\n}`;
 ---
 
 {
 	projects.length > 0 ? (
-		<ul class="rows">
-			<li class="row row-head label" aria-hidden="true">
-				<span>Project</span>
-				<span>System</span>
-				<span>Year</span>
-			</li>
-			{projects.map((project) => (
-				<li>
-					<a class="row" href={`/projects/${project.slug}`}>
-						<span class="title">{project.title}</span>
-						<span class="system label">{project.system}</span>
-						<span class="year label">{project.year}</span>
-						<span class="context">{project.context}</span>
-					</a>
+		<div class:list={['index', { 'has-previews': hasPreviews }]}>
+			<ul class="rows">
+				<li class="row row-head label" aria-hidden="true">
+					<span>Project</span>
+					<span>System</span>
+					<span>Year</span>
 				</li>
-			))}
-		</ul>
+				{projects.map((project) => (
+					<li>
+						<a class="row" href={`/projects/${project.slug}`}>
+							<span class="title">{project.title}</span>
+							<span class="system label">{project.system}</span>
+							<span class="year label">{project.year}</span>
+							<span class="context">{project.context}</span>
+						</a>
+					</li>
+				))}
+			</ul>
+			{hasPreviews && (
+				<div class="previews" aria-hidden="true">
+					{previews.map((preview) => (
+						<div class="preview">
+							{preview && (
+								<img
+									src={preview.src}
+									width={PREVIEW.width}
+									height={PREVIEW.height}
+									alt=""
+									loading="lazy"
+									decoding="async"
+									style={preview.style || undefined}
+								/>
+							)}
+						</div>
+					))}
+				</div>
+			)}
+		</div>
 	) : (
 		<p class="empty">Projects will appear here soon.</p>
 	)
 }
 
+{hasPreviews && <style is:inline set:html={previewRules} />}
+
 <style>
+	.index {
+		display: grid;
+		gap: var(--space-xl);
+	}
+
+	@media (min-width: 56rem) {
+		.has-previews {
+			grid-template-columns: 1.5fr 1fr;
+			align-items: start;
+			gap: var(--space-2xl);
+		}
+	}
+
 	.rows {
 		padding: 0;
 		list-style: none;
@@ -85,6 +154,34 @@ const { projects } = Astro.props;
 	a.row:hover .title,
 	a.row:focus-visible .title {
 		color: var(--color-accent);
+	}
+
+	/* Previews: wide screens only. The rule that shows the active one is generated above. */
+	.previews {
+		display: none;
+	}
+
+	@media (min-width: 56rem) {
+		.previews {
+			position: sticky;
+			inset-block-start: var(--space-l);
+			display: grid;
+		}
+
+		.preview {
+			grid-area: 1 / 1;
+			opacity: 0;
+			transition: opacity var(--duration-base) var(--ease-out);
+		}
+
+		.preview img {
+			inline-size: 100%;
+			block-size: auto;
+			aspect-ratio: 4 / 3;
+			object-fit: cover;
+			background-size: cover;
+			border: var(--border-hairline);
+		}
 	}
 
 	.empty {

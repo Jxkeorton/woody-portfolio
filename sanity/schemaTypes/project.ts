@@ -40,6 +40,23 @@ export const project = defineType({
 			validation: (rule) => rule.required().max(120),
 		}),
 		defineField({
+			name: 'cover',
+			title: 'Cover image',
+			description:
+				'Shown beside the project list on the home page when someone points at this project. Landscape works best.',
+			type: 'image',
+			options: { hotspot: true },
+			fields: [
+				defineField({
+					name: 'alt',
+					title: 'Alt text',
+					description: 'Describe what the image shows for people who cannot see it.',
+					type: 'string',
+					validation: (rule) => rule.required().max(200),
+				}),
+			],
+		}),
+		defineField({
 			name: 'blocks',
 			title: 'Page content',
 			description: 'Build the project page from these parts. Drag to reorder.',
@@ -47,5 +64,5 @@ export const project = defineType({
 			of: [{ type: 'heading' }, { type: 'richText' }, { type: 'imageSet' }],
 		}),
 	],
-	preview: { select: { title: 'title', subtitle: 'slug.current' } },
+	preview: { select: { title: 'title', subtitle: 'slug.current', media: 'cover' } },
 });
