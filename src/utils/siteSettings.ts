@@ -23,6 +23,7 @@ export const resolveSiteSettings = (raw: RawSiteSettings | null): SiteSettings =
 		roleLine: filled(raw.roleLine),
 		availabilityLine: filled(raw.availabilityLine),
 		about: filled(raw.about),
+		profileImage: raw.profileImage?.asset ? raw.profileImage : undefined,
 		email: filled(raw.email),
 		contactHeading: filled(raw.contactHeading) ?? d.contactHeading,
 		siteTitle: filled(raw.siteTitle) ?? d.siteTitle,

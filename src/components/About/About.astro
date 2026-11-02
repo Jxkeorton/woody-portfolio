@@ -1,16 +1,55 @@
 ---
+import { croppedDimensions, objectPosition, srcSetWidths } from '../../utils/image';
+import { imageSrcSet, imageUrl } from '../../utils/sanity';
+import type { ProfileImage } from '../../utils/siteSettings.types';
+
 interface Props {
 	about?: string;
+	profileImage?: ProfileImage;
 }
 
-const { about } = Astro.props;
+const { about, profileImage } = Astro.props;
+
+const photo = profileImage && {
+	...croppedDimensions(profileImage.asset.metadata.dimensions, profileImage.crop),
+	alt: profileImage.alt,
+	source: {
+		asset: profileImage.asset,
+		hotspot: profileImage.hotspot,
+		crop: profileImage.crop,
+	},
+};
+const photoProps = photo && {
+	width: photo.width,
+	height: photo.height,
+	alt: photo.alt,
+	src: imageUrl(photo.source, { width: Math.min(photo.width, 800) }),
+	srcset: imageSrcSet(photo.source, srcSetWidths(photo.width)),
+	style: [
+		profileImage.asset.metadata.lqip && `background-image: url('${profileImage.asset.metadata.lqip}')`,
+		objectPosition(profileImage.hotspot) && `object-position: ${objectPosition(profileImage.hotspot)}`,
+	]
+		.filter(Boolean)
+		.join('; '),
+};
 ---
 
 {
-	about && (
+	(about || photoProps) && (
 		<section class="about" id="about" aria-labelledby="about-heading">
-			<h2 id="about-heading">About</h2>
-			<p>{about}</p>
+			<div class="side">
+				<h2 id="about-heading">About</h2>
+				{photoProps && (
+					<img
+						{...photoProps}
+						style={photoProps.style || undefined}
+						sizes="(min-width: 56rem) 20rem, 60vw"
+						loading="lazy"
+						decoding="async"
+					/>
+				)}
+			</div>
+			{about && <p>{about}</p>}
 		</section>
 	)
 }
@@ -22,11 +61,16 @@ const { about } = Astro.props;
 		padding-inline: var(--gutter);
 	}
 
-	/* About */
 	.about {
 		display: grid;
-		gap: var(--space-s);
+		gap: var(--space-m);
 		padding-block-start: var(--space-2xl);
+	}
+
+	.side {
+		display: grid;
+		gap: var(--space-m);
+		align-content: start;
 	}
 
 	@media (min-width: 56rem) {
@@ -44,6 +88,17 @@ const { about } = Astro.props;
 		line-height: var(--leading-body);
 		text-transform: uppercase;
 		color: var(--color-text-muted);
+	}
+
+	img {
+		inline-size: min(100%, 20rem);
+		block-size: auto;
+		aspect-ratio: 4 / 5;
+		object-fit: cover;
+		background-color: var(--color-surface);
+		background-size: cover;
+		border: var(--border-hairline);
+		border-radius: var(--radius-s);
 	}
 
 	.about p {

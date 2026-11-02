@@ -77,6 +77,12 @@ export const SITE_SETTINGS_QUERY = defineQuery(`*[_type == "siteSettings"][0]{
 	roleLine,
 	availabilityLine,
 	about,
+	profileImage{
+		alt,
+		hotspot,
+		crop,
+		asset->{ _id, metadata { lqip, dimensions { width, height } } }
+	},
 	email,
 	contactHeading,
 	siteTitle,

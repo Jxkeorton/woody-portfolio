@@ -54,6 +54,24 @@ export const siteSettings = defineType({
 			validation: (rule) => rule.max(600),
 		}),
 		defineField({
+			name: 'profileImage',
+			title: 'Profile photo',
+			description:
+				'Shown beside the About text. A portrait photo works best. Drag the focal point onto your face.',
+			type: 'image',
+			group: 'about',
+			options: { hotspot: true },
+			fields: [
+				defineField({
+					name: 'alt',
+					title: 'Alt text',
+					description: 'Describe the photo for people who cannot see it.',
+					type: 'string',
+					validation: (rule) => rule.required().max(200),
+				}),
+			],
+		}),
+		defineField({
 			name: 'email',
 			title: 'Email address',
 			description: 'Shown at the bottom of every page as a link people can click to write to you.',

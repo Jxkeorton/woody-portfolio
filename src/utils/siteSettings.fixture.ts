@@ -1,4 +1,18 @@
-import type { RawSiteSettings, SiteSettings } from './siteSettings.types';
+import type { ProfileImage, RawSiteSettings, SiteSettings } from './siteSettings.types';
+
+export const profileImage: ProfileImage = {
+	alt: 'Woody beside the finished car',
+	hotspot: { x: 0.3, y: 0.25, width: 0.4, height: 0.4 },
+	asset: {
+		_id: 'image-profile000000000000000000000000-900x1200-jpg',
+		metadata: { lqip: 'data:image/jpeg;base64,/9j/lqip', dimensions: { width: 900, height: 1200 } },
+	},
+};
+
+export const croppedProfileImage: ProfileImage = {
+	...profileImage,
+	crop: { top: 0.1, bottom: 0.1, left: 0, right: 0 },
+};
 
 export const full: SiteSettings = {
 	name: 'Woody',
@@ -6,6 +20,7 @@ export const full: SiteSettings = {
 	roleLine: 'Automotive engineering student',
 	availabilityLine: 'Open to placements and graduate roles',
 	about: 'I am in my third year. Each project shows the method and the numbers.',
+	profileImage,
 	email: 'woody@example.org',
 	contactHeading: 'Hiring for a placement or graduate role?',
 	siteTitle: 'Woody · Automotive engineering student',
@@ -28,6 +43,7 @@ export const rawCleared: RawSiteSettings = {
 	roleLine: null,
 	availabilityLine: null,
 	about: null,
+	profileImage: null,
 	email: null,
 	contactHeading: null,
 	siteTitle: null,

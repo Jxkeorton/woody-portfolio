@@ -19,7 +19,7 @@ const [projects, settings] = await Promise.all([getProjects(), getSiteSettings()
 		<ProjectList projects={projects} />
 	</section>
 
-	<About about={settings.about} />
+	<About about={settings.about} profileImage={settings.profileImage} />
 </Base>
 
 <style>

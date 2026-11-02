@@ -36,6 +36,7 @@ describe('Site settings schema', () => {
 			'roleLine',
 			'availabilityLine',
 			'about',
+			'profileImage',
 			'email',
 			'contactHeading',
 			'siteTitle',
@@ -47,6 +48,30 @@ describe('Site settings schema', () => {
 		for (const name of ['name', 'statement', 'email']) {
 			expect(rulesOf(name)).toContain('required');
 		}
+	});
+
+	it('lets editors pick a focal point for the profile image', () => {
+		const field = fields.find((f) => f.name === 'profileImage') as
+			| { type: string; options?: { hotspot?: boolean } }
+			| undefined;
+		expect(field?.type).toBe('image');
+		expect(field?.options?.hotspot).toBe(true);
+	});
+
+	it('requires alt text on the profile image', () => {
+		const field = fields.find((f) => f.name === 'profileImage') as
+			| { fields?: { name: string; validation?: unknown }[] }
+			| undefined;
+		const alt = field?.fields?.find((f) => f.name === 'alt');
+		expect(alt).toBeDefined();
+		const calls: string[] = [];
+		const rule: Record<string, () => unknown> = new Proxy(
+			{},
+			{ get: (_t, key: string) => () => (calls.push(key), rule) },
+		);
+		const validate = alt?.validation as ((r: unknown) => unknown) | undefined;
+		validate?.(rule);
+		expect(calls).toContain('required');
 	});
 
 	it('checks the email looks like an email address', () => {

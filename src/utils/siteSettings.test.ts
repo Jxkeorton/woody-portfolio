@@ -16,6 +16,7 @@ describe('Site settings query', () => {
 			'roleLine',
 			'availabilityLine',
 			'about',
+			'profileImage',
 			'email',
 			'contactHeading',
 			'siteTitle',
@@ -24,6 +25,12 @@ describe('Site settings query', () => {
 			expect(SITE_SETTINGS_QUERY).toContain(field);
 		}
 		expect(SITE_SETTINGS_QUERY).not.toContain('...');
+	});
+
+	it('fetches the profile image with its alt text, focal point, crop, preview and size', () => {
+		for (const field of ['alt', 'hotspot', 'crop', 'lqip', 'dimensions']) {
+			expect(SITE_SETTINGS_QUERY).toContain(field);
+		}
 	});
 });
 
@@ -60,6 +67,7 @@ describe('Site settings with defaults', () => {
 			expect(settings.availabilityLine).toBeUndefined();
 			expect(settings.about).toBeUndefined();
 			expect(settings.email).toBeUndefined();
+			expect(settings.profileImage).toBeUndefined();
 		});
 	});
 
@@ -68,6 +76,7 @@ describe('Site settings with defaults', () => {
 			const settings = resolveSiteSettings(minimal);
 			expect(settings.name).toBe(minimal.name);
 			expect(settings.about).toBeUndefined();
+			expect(settings.profileImage).toBeUndefined();
 		});
 	});
 });
