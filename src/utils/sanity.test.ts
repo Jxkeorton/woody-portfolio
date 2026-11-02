@@ -89,8 +89,12 @@ describe('Sanity queries', () => {
 			}
 		});
 
-		it('lists the newest projects first', () => {
-			expect(PROJECTS_QUERY).toContain('order(year desc');
+		it('lists projects in the order set in the Studio', () => {
+			expect(PROJECTS_QUERY).toContain('order(coalesce(orderRank');
+		});
+
+		it('puts projects that have not been ranked yet after the ranked ones, newest first', () => {
+			expect(PROJECTS_QUERY).toContain('year desc, title asc');
 		});
 	});
 });

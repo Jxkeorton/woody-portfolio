@@ -1,5 +1,6 @@
 import { defineConfig } from 'sanity';
 import { structureTool } from 'sanity/structure';
+import { orderableDocumentListDeskItem } from '@sanity/orderable-document-list';
 import { visionTool } from '@sanity/vision';
 import { schemaTypes } from './sanity/schemaTypes';
 
@@ -9,6 +10,8 @@ const singletons = [
 	{ type: 'cv', title: 'Experience and education' },
 ];
 const singletonTypes = singletons.map(({ type }) => type);
+// Document types that get their own drag-and-drop list instead of the default one.
+const orderableTypes = ['project'];
 
 export default defineConfig({
 	name: 'default',
@@ -17,7 +20,7 @@ export default defineConfig({
 	dataset: process.env.SANITY_STUDIO_DATASET ?? 'production',
 	plugins: [
 		structureTool({
-			structure: (S) =>
+			structure: (S, context) =>
 				S.list()
 					.title('Content')
 					.items([
@@ -28,8 +31,9 @@ export default defineConfig({
 								.child(S.document().schemaType(type).documentId(type)),
 						),
 						S.divider(),
+						orderableDocumentListDeskItem({ type: 'project', title: 'Projects', S, context }),
 						...S.documentTypeListItems().filter(
-							(item) => !singletonTypes.includes(item.getId() ?? ''),
+							(item) => ![...singletonTypes, ...orderableTypes].includes(item.getId() ?? ''),
 						),
 					]),
 		}),
