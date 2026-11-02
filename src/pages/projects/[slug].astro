@@ -1,0 +1,20 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import ProjectDetail from '../../components/ProjectDetail/ProjectDetail.astro';
+import { getProject, getProjects } from '../../utils/sanity';
+
+export const getStaticPaths = (async () => {
+	const summaries = await getProjects();
+	const projects = await Promise.all(summaries.map(({ slug }) => getProject(slug)));
+	return projects.flatMap((project) =>
+		project ? [{ params: { slug: project.slug }, props: { project } }] : [],
+	);
+}) satisfies GetStaticPaths;
+
+const { project } = Astro.props;
+---
+
+<Base title={`${project.title} · Woody`} description={`${project.system}. ${project.context}.`}>
+	<ProjectDetail project={project} />
+</Base>

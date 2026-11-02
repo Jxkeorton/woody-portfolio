@@ -1,38 +1,30 @@
-import type { Project } from '../../data/project.types';
+import type { Project } from '../../utils/project.types';
 
 export const minimalProject: Project = {
-	id: 'minimal',
 	title: 'Minimal project',
+	slug: 'minimal',
 	system: 'Brakes',
-	discipline: 'Coursework',
 	year: '2024',
-	figures: [{ variant: 'rotor', caption: 'Rotor, front view' }],
-	paragraphs: ['A single paragraph about the project.'],
+	context: 'Coursework',
+	blocks: [],
 };
 
 export const fullProject: Project = {
-	id: 'full',
 	title: 'Ventilated brake rotor',
+	slug: 'full',
 	system: 'Brakes',
-	discipline: 'Formula Student team',
 	year: '2025',
-	figures: [
-		{ variant: 'rotor', caption: 'Rotor, front view. Ø 340 mm' },
-		{ variant: 'curve', caption: 'Temperature against time' },
-	],
-	paragraphs: [
-		'Paragraph one.',
-		'Paragraph two.',
-		'Paragraph three.',
-		'Paragraph four.',
-		'Paragraph five.',
-		'Paragraph six.',
+	context: 'Formula Student team',
+	blocks: [
+		{ _type: 'heading', _key: 'a', text: 'Thermal model', level: 'section' },
+		{ _type: 'heading', _key: 'b', text: 'Boundary conditions', level: 'subsection' },
+		{ _type: 'heading', _key: 'c', text: 'Results', level: 'section' },
 	],
 };
 
 export const longTitleProject: Project = {
 	...minimalProject,
-	id: 'long-title',
+	slug: 'long-title',
 	title:
 		'A very long project title that an editor might plausibly write when describing a multi-stage thermal and structural study',
 };

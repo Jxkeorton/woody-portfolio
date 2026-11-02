@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { PROJECT_IDS_QUERY, PROJECT_QUERY, imageUrl } from './sanity';
+import { PROJECTS_QUERY, PROJECT_QUERY, imageUrl, toProject } from './sanity';
 
 const imageSource = {
 	_type: 'image',
@@ -58,9 +58,54 @@ describe('Sanity queries', () => {
 		});
 	});
 
-	describe('given the project ids query', () => {
-		it('fetches only the slugs needed to build static paths', () => {
-			expect(PROJECT_IDS_QUERY).toContain('"slug": slug.current');
+	describe('given the projects query', () => {
+		it('fetches only published projects that have a slug', () => {
+			expect(PROJECTS_QUERY).toContain('_type == "project"');
+			expect(PROJECTS_QUERY).toContain('defined(slug.current)');
+		});
+
+		it('fetches only what the list and page paths need', () => {
+			for (const field of ['title', '"slug": slug.current', 'system', 'year', 'context']) {
+				expect(PROJECTS_QUERY).toContain(field);
+			}
+			expect(PROJECTS_QUERY).not.toContain('blocks');
+		});
+
+		it('lists the newest projects first', () => {
+			expect(PROJECTS_QUERY).toContain('order(year desc');
+		});
+	});
+});
+
+describe('Sanity project data', () => {
+	const raw = {
+		title: 'T',
+		slug: 's',
+		system: 'Brakes',
+		year: '2025',
+		context: 'C',
+		blocks: null,
+	};
+
+	describe('given no project', () => {
+		it('returns null', () => {
+			expect(toProject(null)).toBeNull();
+		});
+	});
+
+	describe('given a project whose blocks have never been set', () => {
+		it('treats the blocks as an empty list', () => {
+			expect(toProject(raw)?.blocks).toEqual([]);
+		});
+	});
+
+	describe('given a project with blocks', () => {
+		it('keeps them in order', () => {
+			const blocks = [
+				{ _type: 'heading' as const, _key: 'a', text: 'One' },
+				{ _type: 'heading' as const, _key: 'b', text: 'Two' },
+			];
+			expect(toProject({ ...raw, blocks })?.blocks).toEqual(blocks);
 		});
 	});
 });

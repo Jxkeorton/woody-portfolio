@@ -1,0 +1,95 @@
+---
+import type { ProjectSummary } from '../../utils/project.types';
+
+interface Props {
+	projects: ProjectSummary[];
+}
+
+const { projects } = Astro.props;
+---
+
+{
+	projects.length > 0 ? (
+		<ul class="rows">
+			<li class="row row-head label" aria-hidden="true">
+				<span>Project</span>
+				<span>System</span>
+				<span>Year</span>
+			</li>
+			{projects.map((project) => (
+				<li>
+					<a class="row" href={`/projects/${project.slug}`}>
+						<span class="title">{project.title}</span>
+						<span class="system label">{project.system}</span>
+						<span class="year label">{project.year}</span>
+						<span class="context">{project.context}</span>
+					</a>
+				</li>
+			))}
+		</ul>
+	) : (
+		<p class="empty">Projects will appear here soon.</p>
+	)
+}
+
+<style>
+	.rows {
+		padding: 0;
+		list-style: none;
+	}
+
+	.row {
+		display: grid;
+		grid-template-columns: 1fr auto auto;
+		column-gap: var(--space-m);
+		row-gap: var(--space-3xs);
+		align-items: baseline;
+		padding-block: var(--space-m);
+		border-block-end: var(--border-hairline);
+		text-decoration: none;
+		color: inherit;
+		transition: padding-inline var(--duration-base) var(--ease-out);
+	}
+
+	.row-head {
+		padding-block: 0 var(--space-xs);
+	}
+
+	.row-head span:last-child,
+	.year {
+		min-inline-size: 4ch;
+		text-align: end;
+	}
+
+	.title {
+		font-size: var(--step-2);
+		font-weight: var(--weight-display);
+		line-height: var(--leading-snug);
+		letter-spacing: -0.02em;
+		overflow-wrap: anywhere;
+		transition: color var(--duration-fast) var(--ease-out);
+	}
+
+	.context {
+		grid-column: 1 / -1;
+		font-size: var(--step--1);
+		color: var(--color-text-muted);
+	}
+
+	a.row:hover,
+	a.row:focus-visible {
+		padding-inline: var(--space-s);
+		background: var(--color-surface);
+	}
+
+	a.row:hover .title,
+	a.row:focus-visible .title {
+		color: var(--color-accent);
+	}
+
+	.empty {
+		padding-block: var(--space-m);
+		border-block: var(--border-hairline);
+		color: var(--color-text-muted);
+	}
+</style>

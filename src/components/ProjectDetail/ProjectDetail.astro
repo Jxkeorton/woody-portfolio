@@ -1,6 +1,6 @@
 ---
-import SpecFigure from '../SpecFigure.astro';
-import type { Project } from '../../data/project.types';
+import BlockRenderer from '../../blocks/BlockRenderer.astro';
+import type { Project } from '../../utils/project.types';
 
 interface Props {
 	project: Project;
@@ -25,19 +25,18 @@ const { project } = Astro.props;
 			</div>
 			<div>
 				<dt class="label">Context</dt>
-				<dd>{project.discipline}</dd>
+				<dd>{project.context}</dd>
 			</div>
 		</dl>
 	</header>
 
-	<div class="body">
-		<div class="prose">
-			{project.paragraphs.map((text) => <p>{text}</p>)}
-		</div>
-		<div class="figures">
-			{project.figures.map((figure) => <SpecFigure variant={figure.variant} caption={figure.caption} />)}
-		</div>
-	</div>
+	{
+		project.blocks.length > 0 && (
+			<div class="body">
+				<BlockRenderer blocks={project.blocks} />
+			</div>
+		)
+	}
 </article>
 
 <style>
@@ -104,29 +103,7 @@ const { project } = Astro.props;
 	}
 
 	.body {
-		display: grid;
-		gap: var(--space-xl);
-	}
-
-	.prose {
-		display: grid;
-		gap: var(--space-m);
-		max-inline-size: 62ch;
-		font-size: var(--step-0);
-		line-height: var(--leading-body);
-		color: var(--color-text-soft);
-	}
-
-	.prose p:first-child {
-		font-size: var(--step-1);
-		line-height: var(--leading-snug);
-		color: var(--color-text);
-	}
-
-	.figures {
-		display: grid;
-		gap: var(--space-l);
-		align-content: start;
+		max-inline-size: var(--content-width);
 	}
 
 	@media (min-width: 56rem) {
@@ -134,18 +111,6 @@ const { project } = Astro.props;
 			grid-template-columns: 1.5fr 1fr;
 			align-items: end;
 			gap: var(--space-2xl);
-		}
-
-		.body {
-			grid-template-columns: 1fr 1fr;
-			gap: var(--space-2xl);
-			align-items: start;
-		}
-
-		/* Drawings sit on their own column and stay in view while the text is read. */
-		.figures {
-			position: sticky;
-			inset-block-start: var(--space-m);
 		}
 	}
 </style>
