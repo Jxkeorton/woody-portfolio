@@ -3,21 +3,22 @@ import type { Project } from './project.types';
 // Placeholder content until Sanity is connected. Shape mirrors the planned project document.
 export const projects: Project[] = [
 	{
-		id: 'ventilated-brake-rotor',
-		title: 'Ventilated brake rotor',
-		system: 'Brakes',
-		discipline: 'Formula Student team. Thermal simulation in ANSYS, design for manufacture',
+		id: 'practical-vehicle-design',
+		title: 'Practical vehicle design',
+		system: 'Steering',
+		discipline: 'Group project, team of six. Steering design, manufacture and testing',
 		year: '2025',
 		figures: [
-			{ variant: 'rotor', caption: 'Rotor, front view. Ø 340 mm' },
-			{ variant: 'curve', caption: 'Disc temperature against time over a braking cycle' },
+			{ variant: 'gear', caption: 'Gear train, schematic' },
+			{ variant: 'section', caption: 'Drivetrain, section view' },
 		],
 		paragraphs: [
-			'The team needed a front rotor that stayed within its temperature limit through a full endurance run without adding unsprung mass.',
-			'I started from the heat load. Using lap data and the car mass, I estimated the energy each rotor absorbs per braking zone and used that as the boundary condition for the simulation.',
-			'The vane layout was the main variable. I compared straight and curved vanes in ANSYS, looking at peak disc temperature and how evenly the heat spread across the swept face.',
-			'The best thermal result needed a vane shape the workshop could not machine from the stock the team could buy. I went back to the model and changed the vane radius until it could be cut in two setups.',
-			'The finished design met the temperature target in simulation with a lower mass than the previous rotor.',
+			'In a team of six, we had to design, test and build a small, self-driven mechanical car to complete a slalom and ramp course, with limited resources. The project was marked on the quality of the technical report, the design considerations and our reflection.',
+			'My role was the steering system. I calculated the steering geometry and evaluated the manoeuvrability the slalom required, so the design came from those requirements.',
+			'I also helped manufacture and test the car, using laser-cut and 3D-printed components, and soldered the circuit for the motors and batteries.',
+			'In testing, the car ran inconsistently and stalled. High friction in the wooden laser-cut gears and a gear modulus that was too small were the main causes.',
+			'The project showed me how much gear design, material selection and friction management matter in a mechanical system.',
+			'The project achieved 70%, which reflected the quality of our written analysis and our discussion of the challenges. Working within the constraints made me look for alternative solutions, and showed me how calculations and material choices shape the design.',
 		],
 	},
 	{
