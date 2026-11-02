@@ -1,4 +1,9 @@
 ---
+interface Props {
+	name: string;
+}
+
+const { name } = Astro.props;
 const links = [
 	{ href: '/#work', label: 'Work' },
 	{ href: '/#about', label: 'About' },
@@ -8,7 +13,7 @@ const links = [
 
 <header>
 	<nav aria-label="Main">
-		<a class="mark" href="/" aria-label="Woody, home">W</a>
+		<a class="mark" href="/" aria-label={`${name}, home`}>{name.charAt(0).toUpperCase()}</a>
 		<ul>
 			{
 				links.map(({ href, label }) => (

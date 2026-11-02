@@ -1,12 +1,19 @@
 ---
+import type { SiteSettings } from '../utils/siteSettings.types';
+
+interface Props {
+	settings: Pick<SiteSettings, 'name' | 'email' | 'contactHeading'>;
+}
+
+const { name, email, contactHeading } = Astro.props.settings;
 const year = new Date().getFullYear();
 ---
 
 <footer id="contact">
 	<div class="inner">
-		<h2>Hiring for a placement or graduate role?</h2>
-		<a class="email" href="mailto:hello@example.com">hello@example.com</a>
-		<p class="label">&copy; {year} Woody. All rights reserved.</p>
+		<h2>{contactHeading}</h2>
+		{email && <a class="email" href={`mailto:${email}`}>{email}</a>}
+		<p class="label">&copy; {year} {name}. All rights reserved.</p>
 	</div>
 </footer>
 

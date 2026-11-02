@@ -2,6 +2,7 @@
 import { Font } from 'astro:assets';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { getSiteSettings } from '../utils/sanity';
 import '../styles/global.css';
 
 interface Props {
@@ -10,6 +11,7 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
+const settings = await getSiteSettings();
 ---
 
 <html lang="en">
@@ -25,11 +27,11 @@ const { title, description } = Astro.props;
 	</head>
 	<body>
 		<a class="skip-link" href="#main">Skip to content</a>
-		<Header />
+		<Header name={settings.name} />
 		<main id="main">
 			<slot />
 		</main>
-		<Footer />
+		<Footer settings={settings} />
 	</body>
 </html>
 
