@@ -55,6 +55,13 @@ describe('Sanity queries', () => {
 			expect(PROJECT_QUERY).toContain('_type == "richText" => { body }');
 		});
 
+		it('fetches the layout and each image with its alt, caption, focal point and size for image sets', () => {
+			expect(PROJECT_QUERY).toContain('_type == "imageSet"');
+			for (const field of ['layout', 'alt', 'caption', 'hotspot', 'crop', 'lqip', 'dimensions']) {
+				expect(PROJECT_QUERY).toContain(field);
+			}
+		});
+
 		it('fetches the details shown in the page title block', () => {
 			for (const field of ['system', 'year', 'context']) {
 				expect(PROJECT_QUERY).toContain(field);

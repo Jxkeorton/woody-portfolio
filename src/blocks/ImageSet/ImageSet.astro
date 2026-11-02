@@ -1,0 +1,119 @@
+---
+import { imageSrcSet, imageUrl } from '../../utils/sanity';
+import { croppedDimensions, imageSizes, objectPosition, srcSetWidths } from '../../utils/image';
+import type { ImageSetBlock } from './imageSet.types';
+
+type Props = Pick<ImageSetBlock, 'images' | 'layout'>;
+
+const { images, layout = 'inset' } = Astro.props;
+
+const figures = images.map((image) => {
+	const source = { asset: image.asset, hotspot: image.hotspot, crop: image.crop };
+	const { width, height } = croppedDimensions(image.asset.metadata.dimensions, image.crop);
+	const lqip = image.asset.metadata.lqip;
+	const style = [
+		lqip && `background-image: url('${lqip}')`,
+		objectPosition(image.hotspot) && `object-position: ${objectPosition(image.hotspot)}`,
+	]
+		.filter(Boolean)
+		.join('; ');
+	return {
+		key: image._key,
+		alt: image.alt,
+		caption: image.caption,
+		width,
+		height,
+		style,
+		src: imageUrl(source, { width: Math.min(width, 1200) }),
+		srcset: imageSrcSet(source, srcSetWidths(width)),
+	};
+});
+
+const sizes = imageSizes(layout, images.length);
+---
+
+{
+	figures.length > 0 && (
+		<div class="set" data-layout={layout} data-count={figures.length}>
+			<div class="grid">
+				{figures.map((figure) => (
+					<figure>
+						<img
+							src={figure.src}
+							srcset={figure.srcset}
+							sizes={sizes}
+							width={figure.width}
+							height={figure.height}
+							alt={figure.alt}
+							loading="lazy"
+							decoding="async"
+							style={figure.style || undefined}
+						/>
+						{figure.caption && <figcaption>{figure.caption}</figcaption>}
+					</figure>
+				))}
+			</div>
+		</div>
+	)
+}
+
+<style>
+	.set {
+		container-type: inline-size;
+	}
+
+	.set[data-layout='inset'] {
+		max-inline-size: var(--inset-width);
+	}
+
+	/* Full goes edge to edge of the viewport, whatever the width of the column it sits in. */
+	.set[data-layout='full'] {
+		inline-size: 100vw;
+		margin-inline: calc(50% - 50vw);
+	}
+
+	.grid {
+		display: grid;
+		gap: var(--space-m);
+	}
+
+	@container (min-width: 36rem) {
+		.set[data-count='2'] .grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		.set[data-count='3'] .grid {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+
+	figure {
+		display: grid;
+		gap: var(--space-2xs);
+		align-content: start;
+		margin: 0;
+	}
+
+	img {
+		inline-size: 100%;
+		block-size: auto;
+		background-size: cover;
+		border: var(--border-hairline);
+	}
+
+	.set[data-layout='full'] img {
+		border-inline: 0;
+	}
+
+	figcaption {
+		font-family: var(--font-mono);
+		font-size: var(--step--1);
+		line-height: var(--leading-snug);
+		color: var(--color-text-muted);
+		padding-inline: var(--gutter);
+	}
+
+	.set:not([data-layout='full']) figcaption {
+		padding-inline: 0;
+	}
+</style>

@@ -3,6 +3,7 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import BlockRenderer from './BlockRenderer.astro';
 import { full, subsection } from './Heading/heading.fixture';
 import { minimal as textMinimal } from './RichText/richText.fixture';
+import { minimal as setMinimal } from './ImageSet/imageSet.fixture';
 import type { HeadingBlock } from './Heading/heading.types';
 
 let container: AstroContainer;
@@ -52,6 +53,13 @@ describe('BlockRenderer', () => {
 			const sub = html.indexOf('Ackermann angle');
 			expect(heading).toBeLessThan(text);
 			expect(text).toBeLessThan(sub);
+		});
+	});
+
+	describe('given an image set after a heading', () => {
+		it('renders the image after the heading', async () => {
+			const html = await render([full, setMinimal]);
+			expect(html.indexOf('Steering geometry')).toBeLessThan(html.indexOf('<img'));
 		});
 	});
 });
