@@ -1,0 +1,15 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import ProjectDetail from '../../components/ProjectDetail/ProjectDetail.astro';
+import { projects } from '../../data/projects';
+
+export const getStaticPaths = (() =>
+	projects.map((project) => ({ params: { id: project.id }, props: { project } }))) satisfies GetStaticPaths;
+
+const { project } = Astro.props;
+---
+
+<Base title={`${project.title} · Woody`} description={project.paragraphs[0]}>
+	<ProjectDetail project={project} />
+</Base>

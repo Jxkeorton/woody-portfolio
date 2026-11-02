@@ -1,42 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import SpecFigure from '../components/SpecFigure.astro';
-
-// Placeholder content until Sanity is connected.
-const projects = [
-	{
-		title: 'Ventilated brake rotor',
-		system: 'Brakes',
-		discipline: 'Formula Student team. Thermal simulation in ANSYS, design for manufacture',
-		year: '2025',
-		variant: 'rotor',
-		caption: 'Rotor, front view. Ø 340 mm',
-	},
-	{
-		title: 'Turbo response mapping',
-		system: 'Powertrain',
-		discipline: 'Final-year project. Engine calibration and dyno testing',
-		year: '2024',
-		variant: 'curve',
-		caption: 'Torque against rpm, peak marked',
-	},
-	{
-		title: 'Lightweight piston and rod',
-		system: 'Engine',
-		discipline: 'Coursework. Finite element analysis and materials selection',
-		year: '2023',
-		variant: 'section',
-		caption: 'Piston and rod, section view',
-	},
-	{
-		title: 'Close-ratio gearset',
-		system: 'Transmission',
-		discipline: 'Coursework. Gear design and fatigue calculations',
-		year: '2022',
-		variant: 'gear',
-		caption: 'Spur gear, module 2.5, 40 teeth',
-	},
-] as const;
+import { projects } from '../data/projects';
 
 const startLinks = [
 	{ href: '#work', label: 'See my projects' },
@@ -89,7 +54,7 @@ const startLinks = [
 				{
 					projects.map((project) => (
 						<li>
-							<a class="row" href="#work">
+							<a class="row" href={`/projects/${project.id}`}>
 								<span class="title">{project.title}</span>
 								<span class="system label">{project.system}</span>
 								<span class="year label">{project.year}</span>
@@ -103,7 +68,7 @@ const startLinks = [
 				{
 					projects.map((project) => (
 						<div class="preview">
-							<SpecFigure variant={project.variant} caption={project.caption} />
+							<SpecFigure variant={project.figures[0].variant} caption={project.figures[0].caption} />
 						</div>
 					))
 				}
