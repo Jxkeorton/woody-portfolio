@@ -2,6 +2,7 @@
 import { Font } from 'astro:assets';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import HeadMeta from '../components/HeadMeta/HeadMeta.astro';
 import { getSiteSettings } from '../utils/sanity';
 import '../styles/global.css';
 
@@ -16,12 +17,13 @@ const settings = await getSiteSettings();
 
 <html lang="en">
 	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta name="description" content={description} />
-		<meta name="theme-color" content="#f5f3ec" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<title>{title}</title>
+		<HeadMeta
+			title={title}
+			description={description}
+			siteName={settings.name}
+			path={Astro.url.pathname}
+			siteUrl={Astro.site?.href}
+		/>
 		<Font cssVariable="--font-newsreader" preload />
 		<Font cssVariable="--font-plex-mono" />
 	</head>
