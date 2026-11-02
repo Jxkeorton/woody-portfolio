@@ -2,6 +2,8 @@ import { sanityClient } from 'sanity:client';
 import { createImageUrlBuilder } from '@sanity/image-url';
 import { defineQuery } from 'groq';
 import type { Block, Project, ProjectSummary } from './project.types';
+import { resolveCv } from './cv';
+import type { RawCv } from './cv.types';
 import { resolveSiteSettings } from './siteSettings';
 import type { RawSiteSettings } from './siteSettings.types';
 
@@ -93,3 +95,11 @@ export const SITE_SETTINGS_QUERY = defineQuery(`*[_type == "siteSettings"][0]{
 
 export const getSiteSettings = async () =>
 	resolveSiteSettings(await sanityClient.fetch<RawSiteSettings | null>(SITE_SETTINGS_QUERY));
+
+export const CV_QUERY = defineQuery(`*[_type == "cv"][0]{
+	experience[]{ _key, role, organisation, period, location, description },
+	qualifications[]{ _key, qualification, institution, period, grade, detail },
+	"cvFile": cvFile.asset->{ url, size }
+}`);
+
+export const getCv = async () => resolveCv(await sanityClient.fetch<RawCv | null>(CV_QUERY));

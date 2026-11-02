@@ -2,11 +2,14 @@
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero/Hero.astro';
 import About from '../components/About/About.astro';
+import Experience from '../components/Experience/Experience.astro';
+import Education from '../components/Education/Education.astro';
+import CvDownload from '../components/CvDownload/CvDownload.astro';
 import Skills from '../components/Skills/Skills.astro';
 import ProjectList from '../components/ProjectList/ProjectList.astro';
-import { getProjects, getSiteSettings } from '../utils/sanity';
+import { getCv, getProjects, getSiteSettings } from '../utils/sanity';
 
-const [projects, settings] = await Promise.all([getProjects(), getSiteSettings()]);
+const [projects, settings, cv] = await Promise.all([getProjects(), getSiteSettings(), getCv()]);
 ---
 
 <Base title={settings.siteTitle} description={settings.siteDescription}>
@@ -21,6 +24,9 @@ const [projects, settings] = await Promise.all([getProjects(), getSiteSettings()
 	</section>
 
 	<About about={settings.about} profileImage={settings.profileImage} />
+	<Experience entries={cv.experience} />
+	<Education entries={cv.qualifications} />
+	<CvDownload file={cv.cvFile} name={settings.name} />
 	<Skills skills={settings.skills} />
 </Base>
 

@@ -1,0 +1,106 @@
+---
+import type { ExperienceEntry } from '../../utils/cv.types';
+
+interface Props {
+	entries: ExperienceEntry[];
+}
+
+const { entries } = Astro.props;
+---
+
+{
+	entries.length > 0 && (
+		<section class="cv" id="experience" aria-labelledby="experience-heading">
+			<h2 id="experience-heading">Experience</h2>
+			<ol>
+				{entries.map(({ role, organisation, period, location, description }) => (
+					<li>
+						<p class="period">{period}</p>
+						<div>
+							<h3>{role}</h3>
+							<p class="where">{[organisation, location].filter(Boolean).join(' · ')}</p>
+							{description && <p class="description">{description}</p>}
+						</div>
+					</li>
+				))}
+			</ol>
+		</section>
+	)
+}
+
+<style>
+	section {
+		max-inline-size: var(--content-width);
+		margin-inline: auto;
+		padding-inline: var(--gutter);
+	}
+
+	.cv {
+		display: grid;
+		gap: var(--space-m);
+		padding-block-start: var(--space-2xl);
+	}
+
+	@media (min-width: 56rem) {
+		.cv {
+			grid-template-columns: 1fr 2fr;
+			gap: var(--space-2xl);
+		}
+	}
+
+	h2 {
+		font-family: var(--font-mono);
+		font-size: var(--step--2);
+		font-weight: 500;
+		letter-spacing: var(--tracking-label);
+		line-height: var(--leading-body);
+		text-transform: uppercase;
+		color: var(--color-text-muted);
+	}
+
+	ol {
+		padding: 0;
+		list-style: none;
+		border-block-start: var(--border-hairline);
+	}
+
+	li {
+		display: grid;
+		gap: var(--space-3xs);
+		padding-block: var(--space-m);
+		border-block-end: var(--border-hairline);
+		overflow-wrap: anywhere;
+	}
+
+	@media (min-width: 40rem) {
+		li {
+			grid-template-columns: 11rem 1fr;
+			column-gap: var(--space-m);
+		}
+	}
+
+	.period {
+		font-family: var(--font-mono);
+		font-size: var(--step--1);
+		color: var(--color-text-muted);
+	}
+
+	h3 {
+		font-size: var(--step-1);
+		font-weight: var(--weight-body);
+		line-height: var(--leading-snug);
+		letter-spacing: -0.01em;
+	}
+
+	.where {
+		color: var(--color-text-soft);
+	}
+
+	.description {
+		max-inline-size: 52ch;
+		margin-block-start: var(--space-2xs);
+		font-size: var(--step--1);
+		line-height: var(--leading-body);
+		color: var(--color-text-soft);
+	}
+</style>
