@@ -1,5 +1,6 @@
 ---
 import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
+import Heading from './Heading/Heading.astro';
 
 interface Props {
 	blocks: { _type: string; _key: string }[];
@@ -8,12 +9,37 @@ interface Props {
 const { blocks } = Astro.props;
 
 // The single place that maps a Sanity `_type` to its component. Add one line per new block.
-const components: Record<string, AstroComponentFactory> = {};
+const components: Record<string, AstroComponentFactory> = {
+	heading: Heading,
+};
+
+const known = blocks.filter((block) => block._type in components);
 ---
 
 {
-	blocks.map((block) => {
-		const Block = components[block._type];
-		return Block ? <Block {...block} /> : null;
-	})
+	known.length > 0 && (
+		<div class="blocks">
+			{known.map((block) => {
+				const Block = components[block._type]!;
+				return <Block {...block} />;
+			})}
+		</div>
+	)
 }
+
+<style>
+	/* The one place that sets vertical rhythm between blocks. Blocks set no outer margin. */
+	.blocks {
+		display: grid;
+		gap: var(--space-m);
+	}
+
+	/* A heading belongs to what follows it, so it sits tighter to the next block than to the previous. */
+	.blocks > :global(h2) {
+		margin-block-start: var(--space-l);
+	}
+
+	.blocks > :global(h3) {
+		margin-block-start: var(--space-s);
+	}
+</style>

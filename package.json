@@ -15,7 +15,8 @@
     "lint": "oxlint",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
-    "check": "astro check"
+    "check": "astro check",
+    "studio": "sanity dev"
   },
   "dependencies": {
     "@sanity/astro": "^3.6.0",

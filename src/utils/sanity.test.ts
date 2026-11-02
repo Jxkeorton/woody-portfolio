@@ -41,8 +41,20 @@ describe('Sanity queries', () => {
 			expect(PROJECT_QUERY).toContain('slug.current == $slug');
 		});
 
-		it('fetches the ordered blocks array', () => {
-			expect(PROJECT_QUERY).toContain('blocks');
+		it('fetches the ordered blocks array with each block type and key', () => {
+			expect(PROJECT_QUERY).toContain('blocks[]');
+			expect(PROJECT_QUERY).toContain('_type');
+			expect(PROJECT_QUERY).toContain('_key');
+		});
+
+		it('fetches the heading fields for heading blocks', () => {
+			expect(PROJECT_QUERY).toContain('_type == "heading" => { text, level }');
+		});
+
+		it('fetches the details shown in the page title block', () => {
+			for (const field of ['system', 'year', 'context']) {
+				expect(PROJECT_QUERY).toContain(field);
+			}
 		});
 	});
 
