@@ -2,25 +2,31 @@
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero/Hero.astro';
 import About from '../components/About/About.astro';
+import Experience from '../components/Experience/Experience.astro';
+import Education from '../components/Education/Education.astro';
+import CvDownload from '../components/CvDownload/CvDownload.astro';
 import Skills from '../components/Skills/Skills.astro';
 import ProjectList from '../components/ProjectList/ProjectList.astro';
-import { getProjects, getSiteSettings } from '../utils/sanity';
+import { getCv, getProjects, getSiteSettings } from '../utils/sanity';
 
-const [projects, settings] = await Promise.all([getProjects(), getSiteSettings()]);
+const [projects, settings, cv] = await Promise.all([getProjects(), getSiteSettings(), getCv()]);
 ---
 
 <Base title={settings.siteTitle} description={settings.siteDescription}>
 	<Hero settings={settings} />
 
-	<section class="work" id="work" aria-labelledby="work-heading">
+	<section class="work" id="projects" aria-labelledby="projects-heading">
 		<div class="section-head">
-			<h2 id="work-heading">Projects</h2>
+			<h2 id="projects-heading">Projects</h2>
 			<p class="label">{projects.length} {projects.length === 1 ? 'project' : 'projects'}</p>
 		</div>
 		<ProjectList projects={projects} />
 	</section>
 
 	<About about={settings.about} profileImage={settings.profileImage} />
+	<Experience entries={cv.experience} />
+	<Education entries={cv.qualifications} />
+	<CvDownload file={cv.cvFile} name={settings.name} />
 	<Skills skills={settings.skills} />
 </Base>
 

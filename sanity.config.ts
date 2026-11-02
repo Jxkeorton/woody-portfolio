@@ -3,6 +3,13 @@ import { structureTool } from 'sanity/structure';
 import { visionTool } from '@sanity/vision';
 import { schemaTypes } from './sanity/schemaTypes';
 
+// Documents there is only one of. They get a fixed entry in the Studio and cannot be created, duplicated or deleted.
+const singletons = [
+	{ type: 'siteSettings', title: 'Site settings' },
+	{ type: 'cv', title: 'Experience and education' },
+];
+const singletonTypes = singletons.map(({ type }) => type);
+
 export default defineConfig({
 	name: 'default',
 	title: 'Portfolio',
@@ -14,23 +21,28 @@ export default defineConfig({
 				S.list()
 					.title('Content')
 					.items([
-						S.listItem()
-							.title('Site settings')
-							.id('siteSettings')
-							.child(S.document().schemaType('siteSettings').documentId('siteSettings')),
+						...singletons.map(({ type, title }) =>
+							S.listItem()
+								.title(title)
+								.id(type)
+								.child(S.document().schemaType(type).documentId(type)),
+						),
 						S.divider(),
-						...S.documentTypeListItems().filter((item) => item.getId() !== 'siteSettings'),
+						...S.documentTypeListItems().filter(
+							(item) => !singletonTypes.includes(item.getId() ?? ''),
+						),
 					]),
 		}),
 		visionTool(),
 	],
 	schema: {
 		types: schemaTypes,
-		templates: (templates) => templates.filter(({ schemaType }) => schemaType !== 'siteSettings'),
+		templates: (templates) =>
+			templates.filter(({ schemaType }) => !singletonTypes.includes(schemaType)),
 	},
 	document: {
 		actions: (actions, { schemaType }) =>
-			schemaType === 'siteSettings'
+			singletonTypes.includes(schemaType)
 				? actions.filter(
 						({ action }) => action && !['unpublish', 'delete', 'duplicate'].includes(action),
 					)
