@@ -2,13 +2,15 @@ import type { RawSiteSettings, SiteSettings } from './siteSettings.types';
 
 /** Used until the editor publishes site settings, so the site always builds. */
 export const DEFAULT_SITE_SETTINGS: SiteSettings = {
-	name: 'Woody',
+	name: 'Woody Orton',
 	statement:
 		"I'm an automotive engineering student who likes to test an idea, measure what happened and fix what didn't work.",
+	details: [],
+	skills: [],
 	contactHeading: 'Hiring for a placement or graduate role?',
-	siteTitle: 'Woody · Automotive engineering student',
+	siteTitle: 'Woody Orton · Automotive engineering student',
 	siteDescription:
-		'Portfolio of Woody, an automotive engineering student looking for a placement or graduate role.',
+		'Portfolio of Woody Orton, an automotive engineering student looking for a placement or graduate role.',
 };
 
 /** Treats null and empty strings from Sanity as "not filled in". */
@@ -20,6 +22,8 @@ export const resolveSiteSettings = (raw: RawSiteSettings | null): SiteSettings =
 	return {
 		name: filled(raw.name) ?? d.name,
 		statement: filled(raw.statement) ?? d.statement,
+		details: (raw.details ?? []).filter((detail) => filled(detail.label) && filled(detail.value)),
+		skills: (raw.skills ?? []).filter((skill) => filled(skill)),
 		roleLine: filled(raw.roleLine),
 		availabilityLine: filled(raw.availabilityLine),
 		about: filled(raw.about),

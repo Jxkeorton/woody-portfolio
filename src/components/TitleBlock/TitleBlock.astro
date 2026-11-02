@@ -1,0 +1,50 @@
+---
+import type { SiteDetail } from '../../utils/siteSettings.types';
+
+interface Props {
+	details: SiteDetail[];
+}
+
+const { details } = Astro.props;
+---
+
+{
+	details.length > 0 && (
+		<dl>
+			{details.map(({ label, value }) => (
+				<div>
+					<dt class="label">{label}</dt>
+					<dd>{value}</dd>
+				</div>
+			))}
+		</dl>
+	)
+}
+
+<style>
+	/* Like the title block of an engineering drawing: ruled cells, small labels over values. */
+	dl {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+		margin: 0;
+		border: var(--border-hairline);
+	}
+
+	div {
+		display: grid;
+		gap: var(--space-3xs);
+		padding: var(--space-xs) var(--space-s);
+		border-inline-end: var(--border-hairline);
+		border-block-end: var(--border-hairline);
+		margin: 0 -1px -1px 0;
+		min-inline-size: 0;
+	}
+
+	dd {
+		margin: 0;
+		font-family: var(--font-mono);
+		font-size: var(--step--1);
+		color: var(--color-text-soft);
+		overflow-wrap: anywhere;
+	}
+</style>

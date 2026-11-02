@@ -33,8 +33,10 @@ describe('Site settings schema', () => {
 		expect(fields.map((f) => f.name)).toEqual([
 			'name',
 			'statement',
+			'details',
 			'roleLine',
 			'availabilityLine',
+			'skills',
 			'about',
 			'profileImage',
 			'email',
@@ -72,6 +74,14 @@ describe('Site settings schema', () => {
 		const validate = alt?.validation as ((r: unknown) => unknown) | undefined;
 		validate?.(rule);
 		expect(calls).toContain('required');
+	});
+
+	it('limits the title block to six label and value pairs', () => {
+		expect(rulesOf('details')).toContain('max(6)');
+	});
+
+	it('limits the skills list and the length of each skill', () => {
+		expect(rulesOf('skills')).toContain('max(24)');
 	});
 
 	it('checks the email looks like an email address', () => {

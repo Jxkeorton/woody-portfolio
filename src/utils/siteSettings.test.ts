@@ -15,6 +15,10 @@ describe('Site settings query', () => {
 			'statement',
 			'roleLine',
 			'availabilityLine',
+			'details',
+			'label',
+			'value',
+			'skills',
 			'about',
 			'profileImage',
 			'email',
@@ -45,6 +49,36 @@ describe('Site settings with defaults', () => {
 		});
 	});
 
+	describe('given no settings document', () => {
+		it('names the site after Woody Orton', () => {
+			expect(resolveSiteSettings(null).name).toBe('Woody Orton');
+		});
+
+		it('has no title block details and no skills', () => {
+			expect(resolveSiteSettings(null).details).toEqual([]);
+			expect(resolveSiteSettings(null).skills).toEqual([]);
+		});
+	});
+
+	describe('given details and skills with blank entries', () => {
+		const settings = resolveSiteSettings({
+			details: [
+				{ _key: 'a', label: 'Degree', value: 'BEng' },
+				{ _key: 'b', label: 'Based', value: '  ' },
+				{ _key: 'c', label: '', value: 'Orphan' },
+			],
+			skills: ['CATIA', '', '  ', 'Python'],
+		});
+
+		it('drops details that are missing a label or a value', () => {
+			expect(settings.details.map((d) => d.label)).toEqual(['Degree']);
+		});
+
+		it('drops blank skills and keeps the order of the rest', () => {
+			expect(settings.skills).toEqual(['CATIA', 'Python']);
+		});
+	});
+
 	describe('given a document with every field filled in', () => {
 		it('keeps what the editor wrote', () => {
 			expect(resolveSiteSettings(full)).toEqual(full);
@@ -60,6 +94,11 @@ describe('Site settings with defaults', () => {
 			expect(settings.contactHeading).toBe(DEFAULT_SITE_SETTINGS.contactHeading);
 			expect(settings.siteTitle).toBe(DEFAULT_SITE_SETTINGS.siteTitle);
 			expect(settings.siteDescription).toBe(DEFAULT_SITE_SETTINGS.siteDescription);
+		});
+
+		it('has no details or skills', () => {
+			expect(settings.details).toEqual([]);
+			expect(settings.skills).toEqual([]);
 		});
 
 		it('leaves the optional fields out', () => {

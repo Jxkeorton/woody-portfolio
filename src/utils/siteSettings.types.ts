@@ -10,10 +10,19 @@ export interface ProfileImage {
 	};
 }
 
+/** One label and value in the hero's drawing title block, for example Degree and BEng Automotive. */
+export interface SiteDetail {
+	_key: string;
+	label: string;
+	value: string;
+}
+
 /** The editable site-wide content, after defaults have been applied. */
 export interface SiteSettings {
 	name: string;
 	statement: string;
+	details: SiteDetail[];
+	skills: string[];
 	roleLine?: string;
 	availabilityLine?: string;
 	about?: string;

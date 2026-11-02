@@ -74,6 +74,8 @@ export const getProject = async (slug: string) =>
 export const SITE_SETTINGS_QUERY = defineQuery(`*[_type == "siteSettings"][0]{
 	name,
 	statement,
+	details[]{ _key, label, value },
+	skills,
 	roleLine,
 	availabilityLine,
 	about,

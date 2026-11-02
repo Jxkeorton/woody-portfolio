@@ -1,0 +1,69 @@
+---
+interface Props {
+	skills: string[];
+}
+
+const { skills } = Astro.props;
+---
+
+{
+	skills.length > 0 && (
+		<section class="skills" id="skills" aria-labelledby="skills-heading">
+			<h2 id="skills-heading">Skills and tools</h2>
+			<ul>
+				{skills.map((skill) => (
+					<li>{skill}</li>
+				))}
+			</ul>
+		</section>
+	)
+}
+
+<style>
+	section {
+		max-inline-size: var(--content-width);
+		margin-inline: auto;
+		padding-inline: var(--gutter);
+	}
+
+	.skills {
+		display: grid;
+		gap: var(--space-m);
+		padding-block-start: var(--space-2xl);
+	}
+
+	@media (min-width: 56rem) {
+		.skills {
+			grid-template-columns: 1fr 2fr;
+			gap: var(--space-2xl);
+		}
+	}
+
+	h2 {
+		font-family: var(--font-mono);
+		font-size: var(--step--2);
+		font-weight: 500;
+		letter-spacing: var(--tracking-label);
+		line-height: var(--leading-body);
+		text-transform: uppercase;
+		color: var(--color-text-muted);
+	}
+
+	ul {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
+		column-gap: var(--space-m);
+		padding: 0;
+		list-style: none;
+		border-block-start: var(--border-hairline);
+	}
+
+	li {
+		padding-block: var(--space-xs);
+		border-block-end: var(--border-hairline);
+		font-family: var(--font-mono);
+		font-size: var(--step--1);
+		color: var(--color-text-soft);
+		overflow-wrap: anywhere;
+	}
+</style>
