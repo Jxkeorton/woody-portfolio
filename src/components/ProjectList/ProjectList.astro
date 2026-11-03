@@ -107,9 +107,14 @@ const previewRules = `@media (min-width: 56rem) {\n${showPreview} {\n\topacity: 
 		list-style: none;
 	}
 
+	/* Narrow screens: the title gets the full width, system and year sit beneath it. */
 	.row {
 		display: grid;
-		grid-template-columns: 1fr auto auto;
+		grid-template-columns: 1fr auto;
+		grid-template-areas:
+			'title title'
+			'system year'
+			'context context';
 		column-gap: var(--space-m);
 		row-gap: var(--space-3xs);
 		align-items: baseline;
@@ -121,26 +126,56 @@ const previewRules = `@media (min-width: 56rem) {\n${showPreview} {\n\topacity: 
 	}
 
 	.row-head {
-		padding-block: 0 var(--space-xs);
+		display: none;
 	}
 
-	.row-head span:last-child,
 	.year {
-		min-inline-size: 4ch;
+		grid-area: year;
 		text-align: end;
 	}
 
+	.system {
+		grid-area: system;
+	}
+
 	.title {
-		font-size: var(--step-2);
+		grid-area: title;
+		font-size: var(--step-1);
 		font-weight: var(--weight-display);
 		line-height: var(--leading-snug);
 		letter-spacing: -0.02em;
-		overflow-wrap: anywhere;
+		text-wrap: balance;
+		overflow-wrap: break-word;
 		transition: color var(--duration-fast) var(--ease-out);
 	}
 
+	@media (min-width: 36rem) {
+		.row {
+			grid-template-columns: 1fr minmax(8rem, auto) 4.5rem;
+			grid-template-areas:
+				'title system year'
+				'context context context';
+			column-gap: var(--space-m);
+		}
+
+		.row-head {
+			display: grid;
+			padding-block: 0 var(--space-xs);
+			grid-template-areas: none;
+			grid-template-columns: 1fr minmax(8rem, auto) 4.5rem;
+		}
+
+		.row-head span:last-child {
+			text-align: end;
+		}
+
+		.title {
+			font-size: var(--step-2);
+		}
+	}
+
 	.context {
-		grid-column: 1 / -1;
+		grid-area: context;
 		font-size: var(--step--1);
 		color: var(--color-text-muted);
 	}
