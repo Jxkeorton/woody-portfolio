@@ -88,6 +88,7 @@ export const SITE_SETTINGS_QUERY = defineQuery(`*[_type == "siteSettings"][0]{
 		asset->{ _id, metadata { lqip, dimensions { width, height } } }
 	},
 	email,
+	linkedinUrl,
 	contactHeading,
 	siteTitle,
 	siteDescription

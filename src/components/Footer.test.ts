@@ -27,6 +27,28 @@ describe('Footer', () => {
 		});
 	});
 
+	describe('given a LinkedIn address', () => {
+		it('shows a LinkedIn link that opens the profile', async () => {
+			const html = await render(full);
+			expect(html).toMatch(
+				new RegExp(`<a[^>]*href="${full.linkedinUrl}"[^>]*>[\\s\\S]*?LinkedIn[\\s\\S]*?</a>`),
+			);
+		});
+
+		it('shows a LinkedIn icon that screen readers skip', async () => {
+			const html = await render(full);
+			expect(html).toMatch(/<svg[^>]*aria-hidden="true"/);
+		});
+	});
+
+	describe('given no LinkedIn address', () => {
+		it('shows no LinkedIn link', async () => {
+			const html = await render(minimal);
+			expect(html).not.toContain('LinkedIn');
+			expect(html).not.toContain('<svg');
+		});
+	});
+
 	describe('given no email address', () => {
 		it('shows the heading but no mailto link', async () => {
 			const html = await render(minimal);

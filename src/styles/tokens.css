@@ -31,6 +31,8 @@
 	--color-accent-soft: var(--green-100);
 	--color-border: var(--paper-300);
 	--color-focus: var(--green-600);
+	/* LinkedIn's brand blue, used only for its icon. 5.1:1 on the paper background. */
+	--color-linkedin: #0a66c2;
 
 	/* Type: families */
 	--font-display: var(--font-newsreader), 'Iowan Old Style', Georgia, serif;
