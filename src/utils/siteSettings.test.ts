@@ -22,6 +22,7 @@ describe('Site settings query', () => {
 			'about',
 			'profileImage',
 			'email',
+			'linkedinUrl',
 			'contactHeading',
 			'siteTitle',
 			'siteDescription',
@@ -46,6 +47,10 @@ describe('Site settings with defaults', () => {
 
 		it('uses Woody’s email address', () => {
 			expect(resolveSiteSettings(null).email).toBe('woodyorton@outlook.com');
+		});
+
+		it('links to Woody’s LinkedIn profile', () => {
+			expect(resolveSiteSettings(null).linkedinUrl).toBe('https://www.linkedin.com/in/w-orton/');
 		});
 
 		it('uses the default About text', () => {
@@ -100,6 +105,7 @@ describe('Site settings with defaults', () => {
 			expect(settings.statement).toBe(DEFAULT_SITE_SETTINGS.statement);
 			expect(settings.contactHeading).toBe(DEFAULT_SITE_SETTINGS.contactHeading);
 			expect(settings.email).toBe(DEFAULT_SITE_SETTINGS.email);
+			expect(settings.linkedinUrl).toBe(DEFAULT_SITE_SETTINGS.linkedinUrl);
 			expect(settings.about).toBe(DEFAULT_SITE_SETTINGS.about);
 			expect(settings.siteTitle).toBe(DEFAULT_SITE_SETTINGS.siteTitle);
 			expect(settings.siteDescription).toBe(DEFAULT_SITE_SETTINGS.siteDescription);

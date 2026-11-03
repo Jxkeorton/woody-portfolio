@@ -123,6 +123,15 @@ export const siteSettings = defineType({
 			validation: (rule) => rule.required().email(),
 		}),
 		defineField({
+			name: 'linkedinUrl',
+			title: 'LinkedIn profile',
+			description:
+				'Shown next to your email address with a LinkedIn icon. Paste the full address of your profile.',
+			type: 'url',
+			group: 'contact',
+			validation: (rule) => rule.uri({ scheme: ['https'] }),
+		}),
+		defineField({
 			name: 'contactHeading',
 			title: 'Contact heading',
 			description: 'The question or invitation above the email address.',

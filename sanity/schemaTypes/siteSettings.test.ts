@@ -40,6 +40,7 @@ describe('Site settings schema', () => {
 			'about',
 			'profileImage',
 			'email',
+			'linkedinUrl',
 			'contactHeading',
 			'siteTitle',
 			'siteDescription',
@@ -86,6 +87,10 @@ describe('Site settings schema', () => {
 
 	it('checks the email looks like an email address', () => {
 		expect(rulesOf('email')).toContain('email');
+	});
+
+	it('checks the LinkedIn address is a web link', () => {
+		expect(rulesOf('linkedinUrl').some((call) => call.startsWith('uri'))).toBe(true);
 	});
 
 	it('limits the length of the long text fields', () => {

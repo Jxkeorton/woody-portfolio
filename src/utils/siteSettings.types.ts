@@ -28,6 +28,7 @@ export interface SiteSettings {
 	about?: string;
 	profileImage?: ProfileImage;
 	email?: string;
+	linkedinUrl?: string;
 	contactHeading: string;
 	siteTitle: string;
 	siteDescription: string;
