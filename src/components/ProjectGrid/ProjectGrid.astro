@@ -9,7 +9,7 @@ interface Props {
 
 const { projects } = Astro.props;
 
-// Tiles are 4:3. Three sizes cover one, two and three columns on normal and high-density screens.
+// Tiles are 4:3. Three sizes cover two and three columns on normal and high-density screens.
 const WIDTHS = [480, 800, 1200];
 const RATIO = 3 / 4;
 
@@ -50,7 +50,7 @@ const tiles = projects.map((project) => {
 								<img
 									src={image.src}
 									srcset={image.srcset}
-									sizes="(min-width: 56rem) 22rem, (min-width: 36rem) 50vw, 100vw"
+									sizes="(min-width: 56rem) 22rem, 50vw"
 									width={image.width}
 									height={image.height}
 									alt={image.alt}
@@ -83,21 +83,16 @@ const tiles = projects.map((project) => {
 <style>
 	.grid {
 		display: grid;
-		grid-template-columns: 1fr;
-		gap: var(--space-l) var(--space-m);
+		grid-template-columns: repeat(2, 1fr);
+		gap: var(--space-m) var(--space-s);
 		padding: 0;
 		list-style: none;
-	}
-
-	@media (min-width: 36rem) {
-		.grid {
-			grid-template-columns: repeat(2, 1fr);
-		}
 	}
 
 	@media (min-width: 56rem) {
 		.grid {
 			grid-template-columns: repeat(3, 1fr);
+			gap: var(--space-l) var(--space-m);
 		}
 	}
 
@@ -140,17 +135,25 @@ const tiles = projects.map((project) => {
 
 	.meta {
 		display: flex;
+		flex-wrap: wrap;
 		justify-content: space-between;
-		gap: var(--space-s);
+		column-gap: var(--space-s);
 	}
 
 	.title {
-		font-size: var(--step-1);
+		font-size: var(--step-0);
 		font-weight: var(--weight-display);
 		line-height: var(--leading-snug);
 		letter-spacing: -0.02em;
-		overflow-wrap: anywhere;
+		text-wrap: balance;
+		overflow-wrap: break-word;
 		transition: color var(--duration-fast) var(--ease-out);
+	}
+
+	@media (min-width: 36rem) {
+		.title {
+			font-size: var(--step-1);
+		}
 	}
 
 	.tile:hover .title,
